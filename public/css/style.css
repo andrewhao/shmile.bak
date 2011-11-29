@@ -1,0 +1,124 @@
+/**
+ * Colors:
+ * lt grey: 222429
+ * dark grey: 2f3032
+ */
+
+body {
+ /*background: url(/images/bg_linen.png);*/
+ font-family: 'Geo', 'Helvetica Neue', sans-serif;
+ color: #2f3032;
+ /*text-shadow: 1px 1px 1px #666;*/
+ text-shadow: -1px -1px 1px #444;
+}
+
+.nicegradient {
+  background: #2f3032; /* Old browsers */
+  background: -moz-linear-gradient(top, #2f3032 0%, #272a2d 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2f3032), color-stop(100%,#272a2d)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2f3032 0%,#272a2d 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2f3032 0%,#272a2d 100%); /* Opera11.10+ */
+  background: -ms-linear-gradient(top, #2f3032 0%,#272a2d 100%); /* IE10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2f3032', endColorstr='#272a2d',GradientType=0 ); /* IE6-9 */
+  background: linear-gradient(top, #2f3032 0%,#272a2d 100%); /* W3C */
+}
+#window {
+  height: 95%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+#viewport {
+  width:1000px;
+  height: 500px;
+  margin: 3em;
+}
+
+#controls {
+   position: absolute;
+   right: 2em;
+   top: 2em;
+   z-index: 1000;
+}
+
+#status-text {
+  position: absolute;
+  top: 10em;
+  width: 30em;
+  right: 2em;
+}
+#status-text * {
+   font-size: 2em;
+   color: #000;
+   text-shadow: 1px 1px 1px #333;
+}
+
+#instrument {
+  position: absolute;
+  left: 2em;
+  width: 80em;
+}
+#instrument h2 {
+  color: #000;
+  font-size: 4em;
+  text-shadow: 1px 1px 1px #333;
+  font-size
+}
+
+#instrument #current-instrument {
+  color: #F7C90F;
+  text-shadow: -1px -1px 1px #A73900;
+}
+
+
+#thelogo {
+  position: absolute;
+  bottom: -10em;
+}
+
+h1#logo {
+  font-size: 20em;
+  font-weight: bold;
+  margin: 0;
+  position: relative;
+}
+
+h1#logo span {
+  position: absolute;
+  top: 0;
+  color: #2f3032;
+  z-index: 2;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+}
+h1:after {
+  content: "mmtss";
+  color: #000;
+  text-shadow: 1px 1px 1px #000;
+}
+
+
+/**
+ * Toggle radios
+ */
+#record:checked:before {
+ color: #E02500;
+ text-shadow: 	rgba(0,0,0,.5) 0 1px 1px, #E02500 0 0 10px;	 /* old blue: #0589c8 */
+ 	-webkit-border-image: -webkit-gradient(linear, 0% 0%, 100% 0%, 
+							color-stop(0,  hsla(200,100%,85%,.05)),
+							color-stop(.5, #E02500),
+							color-stop(1,  hsla(200,100%,80%,.05)) 
+							)50% 100%;
+}
+#record:hover {
+  cursor: pointer;
+}
+
+#record.wait:checked:before {
+ color: #F7C90F;
+ text-shadow: 	rgba(0,0,0,.5) 0 1px 1px, #F7C90F 0 0 10px;	 /* old blue: #0589c8 */
+ 	-webkit-border-image: -webkit-gradient(linear, 0% 0%, 100% 0%, 
+							color-stop(0,  hsla(200,100%,85%,.05)),
+							color-stop(.5, #F7C90F),
+							color-stop(1,  hsla(200,100%,80%,.05)) 
+							)50% 100%;
+}
