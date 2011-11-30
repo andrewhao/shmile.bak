@@ -9,9 +9,6 @@ socket.on('connect', function() {
   console.log('connected');
 });
 
-socket.on('test', function(data) {
-  console.log('test event intercepted:  ', data);
-});
 
 /*
  * STATE MACHINE DEFINITION
@@ -33,9 +30,9 @@ socket.on('test', function(data) {
  *   - time_up (emit: print)
  */
 var fsm = StateMachine.create({
-  initial: 'loading'
+  initial: 'loading',
   events: [
-    { name: 'connected', from: 'loading', to: 'ready' }
+    { name: 'connected', from: 'loading', to: 'ready' },
     { name: 'button_press', from: 'ready', to: 'counting_down' },
     { name: 'time_up', from: 'counting_down', to: 'snap' },
     { name: 'camera_snapped', from: 'snap', to: 'waiting_for_photo' },
