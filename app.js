@@ -26,7 +26,6 @@ console.log('Web server listening on %s:%d', 'localhost', 3000);
 
 io.sockets.on('connection', function(websocket) {
   sys.puts('Web browser connected');
-  console.log('CONNECTED to web browser.');
 
   // Init the camera controller (gphoto2 lib)
   camera = cameraControl();
@@ -38,9 +37,9 @@ io.sockets.on('connection', function(websocket) {
     console.log('camera snapped');
     websocket.emit('camera_snapped');
   });
-  camera.on('photo_saved', function(filename) {
+  camera.on('photo_saved', function(filename, path, web_url) {
     console.log('I saw the photo saved to '+filename);
-    websocket.emit('photo_saved', {filename: filename});
+    websocket.emit('photo_saved', {filename: filename, path: path, web_url: web_url});
   });
 
   /**
@@ -49,8 +48,8 @@ io.sockets.on('connection', function(websocket) {
   websocket.on('message', function(msg) {
     console.log('message is: ' + msg);
   });
-  websocket.on('snap', function() {
-    camera.emit('snap');
+  websocket.on('snap', function(isFirst) {
+    camera.emit('snap', isFirst);
     // do snap
     // when done, it should emit "camera_snapped"
     // when saved, it should emit "photo_saved"

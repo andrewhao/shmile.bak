@@ -10,21 +10,25 @@ var spawn = require('child_process').spawn
 var savingRegex = /Saving file as ([^.jpg]+)/g
 var capturedPhotoRegex = /New file is in/g
 
-var cameraControl = function(filename, cwd) {
-  console.log('setting up cameraConrol');
+var cameraControl = function(filename, cwd, web_root_path, numFrames) {
+  console.log('setting up cameraControl module');
   if (filename === undefined) filename = "%m-%y-%d_%H:%M:%S.jpg";
-  if (cwd === undefined) cwd = "photos";
+  if (cwd === undefined) cwd = "public/photos";
+  if (web_root_path === undefined) web_root_path = "/photos";
 
   var emitter = new EventEmitter();
 
   emitter.on('snap', function() {
-    console.log('snapping...');
+
     emitter.emit('camera_begin_snap');
 
+    console.log('snapping...');
     var capture = spawn('gphoto2', [
       '--capture-image-and-download',
+      '--force-overwrite',
       '--filename=' + filename
     ], {cwd: cwd});
+    console.log('capture object is ' + capture);
 
     capture.stdout.on('data', function(data) {
       if (capturedPhotoRegex.exec(data.toString())) {
@@ -36,11 +40,10 @@ var cameraControl = function(filename, cwd) {
       if (saving) {
         var fname = saving[1] + '.jpg';
         console.log('saved to '+fname);
-        emitter.emit('photo_saved', fname);
+        emitter.emit('photo_saved', fname, cwd+'/'+fname, web_root_path+'/'+fname);
       }
     });
   });
-
   return emitter;
 };
 
