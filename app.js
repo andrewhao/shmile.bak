@@ -57,6 +57,7 @@ io.sockets.on('connection', function(websocket) {
     // and be ready to receive another snap
   });
   websocket.on('print', function() {
+    console.log('at this point, I should print the file');
     // do print
     // when done, it should emit "printed" (?)
   });

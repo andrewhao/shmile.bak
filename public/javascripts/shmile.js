@@ -6,9 +6,25 @@ socket.on('message', function(data) {
 });
 
 socket.on('connect', function() {
-  console.log('connected');
+  console.log('connected evt');
+  fsm.connected();
 });
 
+$(document).bind('ui_button_pressed', function() {
+  console.log('ui_button_pressed evt');
+  fsm.ui_button_pressed();
+  socket.emit('snap');
+});
+
+socket.on('camera_snapped', function() {
+  console.log('camera_snapped evt');
+  fsm.camera_snapped();
+})
+
+socket.on('photo_saved', function(data) {
+  console.log('photo_saved evt: '+data.filename);
+  fsm.photo_saved();
+});
 
 /*
  * STATE MACHINE DEFINITION
@@ -17,15 +33,13 @@ socket.on('connect', function() {
  * + loading
  *   - connected
  * + ready
- *   - button_press (client)
+ *   - ui_button_pressed (DOM button click)
  * + counting_down
  *   - time_up (emit: snap)
  * + snap
  *   - camera_snapped
  * + waiting_for_photo
  *   - photo_saved
- * + compositing_photo
- *   - done_compositing
  * + review_photo
  *   - time_up (emit: print)
  */
@@ -33,42 +47,21 @@ var fsm = StateMachine.create({
   initial: 'loading',
   events: [
     { name: 'connected', from: 'loading', to: 'ready' },
-    { name: 'button_press', from: 'ready', to: 'counting_down' },
-    { name: 'time_up', from: 'counting_down', to: 'snap' },
+    { name: 'ui_button_pressed', from: 'ready', to: 'snap' },
+    // { name: 'time_up', from: 'counting_down', to: 'snap' },
     { name: 'camera_snapped', from: 'snap', to: 'waiting_for_photo' },
-    { name: 'photo_saved', from: 'waiting_for_photo', to: 'compositing_photo' },
-    { name: 'done_compositing', from: 'compositing_photo', to: 'review_photo' },
-    { name: 'time_up', from: 'review_photo', to: 'ready'}
+    { name: 'photo_saved', from: 'waiting_for_photo', to: 'review_photo' },
+    { name: 'finished_review', from: 'review_photo', to: 'ready'}
   ],
   callbacks: {
-    onenterwait: function(e, f, t) {
-      // you entered with event "recordready"
-      // from practice
-      console.log('now in state ' + t);
-      updateStateText();
-      cmd.newClip(State.currentTrack);
-      $('#record').toggleClass('wait', true);
+    onenterreview_photo: function(e, f, t) {
+      socket.emit('print');
+      setTimeout(function() {
+        fsm.finished_review();
+      }, 3000);
     },
-    onenterrecord: function(e, f, t) {
-      // entered with event "loopbegin"
-      cmd.storeClip(State.currentTrack);
-      updateStateText();
-      nextInstrument();
-      console.log('now in state ' + t);
-      $('#record').toggleClass('wait', false);
-    },
-    onenterpractice: function(e, f, t) {
-      cmd.muteTrack(State.prevTrack, 1);
-      updateStateText();
-      cmd.muteTrack(State.currentTrack, 0);
-      // stop any clips in getInstrumentGroup(newtrk)
-      stopClipsInGroup();
-      console.log('now in state ' + t);
-    },
-    onleaverecord: function() {
-      $('#record').attr('checked', false);
-      var info = getInstrumentInfo();
-      $('#current-instrument').text(info.description + " " + info.name);
+    onchangestate: function(e, f, t) {
+      console.log('fsm received event '+e+', changing state from ' + f + ' to ' + t)
     }
   }
 });
