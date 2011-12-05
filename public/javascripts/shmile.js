@@ -69,17 +69,16 @@ socket.on('photo_saved', function(data) {
  * Keep track of app state and logic.
  *
  * + loading
- *   - connected
+ *   - connected() -> ready
  * + ready
- *   - ui_button_pressed (DOM button click)
- * + counting_down
- *   - time_up (emit: snap)
- * + snap
- *   - camera_snapped
+ *   - ui_button_pressed() (DOM button click) -> waiting_for_photo
  * + waiting_for_photo
- *   - photo_saved
+ *   - photo_saved() -> review_photo
  * + review_photo
- *   - time_up (emit: print)
+ *   - photo_updated() -> next_photo
+ * + next_photo
+ *   - continue_partial_set() -> waiting_for_photo
+ *   - finish_set() -> ready
  */
 var fsm = StateMachine.create({
   initial: 'loading',
@@ -89,9 +88,10 @@ var fsm = StateMachine.create({
     // { name: 'time_up', from: 'counting_down', to: 'snap' },
     // { name: 'camera_snapped', from: 'snap', to: 'waiting_for_photo' },
     { name: 'photo_saved', from: 'waiting_for_photo', to: 'review_photo' },
+    { name: 'photo_updated', from: 'review_photo', to: 'next_photo' },
     // No conditional transitions in this FSM framework? oh well.
-    { name: 'finished_review_partial', from: 'review_photo', to: 'waiting_for_photo' },
-    { name: 'finished_review', from: 'review_photo', to: 'ready'}
+    { name: 'continue_partial_set', from: 'next_photo', to: 'waiting_for_photo' },
+    { name: 'finish_set', from: 'next_photo', to: 'ready' }
   ],
   callbacks: {
     onconnected: function() {
@@ -105,30 +105,29 @@ var fsm = StateMachine.create({
     onenterwaiting_for_photo: function(e) {
       var randomId = Math.ceil(Math.random()*100000);
       socket.emit('snap', true);
-      CameraUtils.snap(randomId);
+      CameraUtils.snap(State.current_frame_idx);
     },
     onphoto_saved: function(e, f, t, data) {
       // update UI
-      console.log('photo saved.');
-      console.log(data);
-      p.updatePhotoSet(data.web_url)
-    },
-    onenterreview_photo: function(e, f, t) {
-      if (State.current_frame_idx == 3) { fsm.finished_review(); }
-      else { fsm.finished_review_partial(); }
-    },
-    onleavereview_photo: function() {
-      // Then reset the frame index state.
-      State.current_frame_idx = (State.current_frame_idx + 1) % 4      
-    },
-    onfinished_review: function() {
-      socket.emit('print');
-      p.modalMessage('Nice!', 3000, 200, function() {
-        p.next();
+      // By the time we get here, the idx has already been updated!!
+      p.updatePhotoSet(data.web_url, State.current_frame_idx, function() {
+        fsm.photo_updated();
       });
+    },
+    onphoto_updated: function(e, f, t) {
+      // We're done with the full set.
+      if (State.current_frame_idx == 3) {
+        fsm.finish_set();
+      }
+      // Move the frame index up to the next frame to update.
+      else {
+        State.current_frame_idx = (State.current_frame_idx + 1) % 4
+        fsm.continue_partial_set();
+      }
     },
     onchangestate: function(e, f, t) {
       console.log('fsm received event '+e+', changing state from ' + f + ' to ' + t)
+      console.log(State);
     }
   }
 });

@@ -5,9 +5,11 @@ function CameraUtils() {};
 
 /**
  * Play the snap effect.
+ * @param {Integer} idx
+ *   The frame index to place the updated image.
  */
-CameraUtils.snap = function(isFirst) {
-    p.zoomFrame(State.current_frame_idx, 'in');
+CameraUtils.snap = function(idx) {
+    p.zoomFrame(idx, 'in');
     p.modalMessage('Ready?', 2000);
     setTimeout(function() {p.modalMessage('Cheese!', 2000)}, 2000);
     // $.get('snap', {'new_set': newSet, 'set_id': State.set_id }, function(data) {
@@ -38,21 +40,21 @@ CameraUtils.scale4x6 = function(maxw, maxh) {
  * Wrapper around snap()
  * Will count a 3-2-1 countdown before snap() is invoked.
  */
-CameraUtils.countdown = function(newSet) {
-    // Zoom in
-    p.zoomFrame(State.current_frame_idx, 'in');
-    p.modalMessage('Ready?', 500);
+// CameraUtils.countdown = function(newSet) {
+//     // Zoom in
+//     p.zoomFrame(State.current_frame_idx, 'in');
+//     p.modalMessage('Ready?', 500);
 
-    var counter = 4;
-    var countdownTimer = setInterval(function() {
-        console.log(counter);
-        p.modalMessage(counter);
-        if (counter == 3) {
-            clearInterval(countdownTimer);
-            setTimeout(function() {
-                CameraUtils.snap(newSet);
-            }, 1000);
-        }
-        counter -= 1;
-    }, 1000);
-}
+//     var counter = 4;
+//     var countdownTimer = setInterval(function() {
+//         console.log(counter);
+//         p.modalMessage(counter);
+//         if (counter == 3) {
+//             clearInterval(countdownTimer);
+//             setTimeout(function() {
+//                 CameraUtils.snap(newSet);
+//             }, 1000);
+//         }
+//         counter -= 1;
+//     }, 1000);
+// }

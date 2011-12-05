@@ -103,10 +103,15 @@ PhotoView.prototype.render = function() {
 
 /**
  * Updates the image at the set location.
+ * @param {String} img_src
+ *   The URL of the image resource the browser should fetch and display
+ * @param {Integer} idx
+ *   Index of frame to update
+ * @param cb
+ *   The callback to be executed when the UI has finished updating and zooming out.
  */
-PhotoView.prototype.updatePhotoSet = function(img_src) {
+PhotoView.prototype.updatePhotoSet = function(img_src, idx, cb) {
     var view = this;
-    var idx = State.current_frame_idx;
     var imgEl = view.images[idx];
     var frameEl = view.frames[idx];
 
@@ -116,9 +121,8 @@ PhotoView.prototype.updatePhotoSet = function(img_src) {
     var afterShowPhoto = function () {
        // We've found and revealed the photo, now hide the old black rect and zoom out
        frameEl.hide();
-       p.zoomFrame(idx, 'out');
+       p.zoomFrame(idx, 'out', cb);
     }
-
     imgEl.animate({'opacity': 1}, 200, afterShowPhoto);
 
 }
@@ -175,8 +179,6 @@ PhotoView.prototype.zoomFrame = function(idx, dir, onfinish) {
     var dx = this.compositeCenter.x - centerX;
     var dy = this.compositeCenter.y - centerY;
     var scaleFactor = this.compositeDim.w / this.frameDim.w;
-    
-    console.log('dx, dy: ' + dx + "," + dy);
         
     if (dir === "out" && State.zoomed) {
         scaleFactor = 1;

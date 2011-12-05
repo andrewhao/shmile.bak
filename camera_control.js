@@ -12,6 +12,12 @@ var capturedPhotoRegex = /New file is in/g
 
 var cameraControl = function(filename, cwd, web_root_path, numFrames) {
   console.log('setting up cameraControl module');
+
+  // Make sure Mac OSX's PTP daemon is dead before we try to run gphoto.
+  spawn('killall', [
+    'PTPCamera'
+  ]);
+
   if (filename === undefined) filename = "%m-%y-%d_%H:%M:%S.jpg";
   if (cwd === undefined) cwd = "public/photos";
   if (web_root_path === undefined) web_root_path = "/photos";

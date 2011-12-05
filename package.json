@@ -34,7 +34,8 @@
    "dependencies": {
        "socket.io": "0.8.4",
        "express": "2.4.6",
-       "jade": "0.15.4"
+       "jade": "0.15.4",
+       "redis": "0.7.1"
    },
    "engines": ["node >=0.4.11"],
    "directories": {
