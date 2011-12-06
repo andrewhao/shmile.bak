@@ -7,8 +7,6 @@ var express = require('express'),
     web = express.createServer(),
     exec = require('child_process').exec;
 
-// var redis = require('redis')
-
 web.configure(function(){
     web.set('views', __dirname + '/views');
     web.set('view engine', 'jade');
@@ -27,12 +25,6 @@ web.get('/', function(req, res) {
 State = {
   image_src_list: []
 };
-
-// var redis_client = redis.createClient();
-
-// redis_client.on('connect', function() {
-//   console.log('connected to redis');
-// })
 
 var io = require('socket.io').listen(web);
 web.listen(3000, 'localhost');
