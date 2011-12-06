@@ -85,13 +85,11 @@ var fsm = StateMachine.create({
   events: [
     { name: 'connected', from: 'loading', to: 'ready' },
     { name: 'ui_button_pressed', from: 'ready', to: 'waiting_for_photo' },
-    // { name: 'time_up', from: 'counting_down', to: 'snap' },
-    // { name: 'camera_snapped', from: 'snap', to: 'waiting_for_photo' },
     { name: 'photo_saved', from: 'waiting_for_photo', to: 'review_photo' },
     { name: 'photo_updated', from: 'review_photo', to: 'next_photo' },
-    // No conditional transitions in this FSM framework? oh well.
     { name: 'continue_partial_set', from: 'next_photo', to: 'waiting_for_photo' },
-    { name: 'finish_set', from: 'next_photo', to: 'ready' }
+    { name: 'finish_set', from: 'next_photo', to: 'review_composited' },
+    { name: 'next_set', from: 'review_composited', to: 'ready'}
   ],
   callbacks: {
     onconnected: function() {
@@ -125,9 +123,18 @@ var fsm = StateMachine.create({
         fsm.continue_partial_set();
       }
     },
+    onenterreview_composited: function(e, f, t) {
+      socket.emit('composite');
+      p.showOverlay(true);
+      setTimeout(function() { fsm.next_set() }, 5000);
+    },
+    onleavereview_composited: function(e, f, t) {
+      // Clean up
+      p.animate('out');
+      p.modalMessage('Nice!', 3000, 200, function() {p.slideInNext()});
+    },
     onchangestate: function(e, f, t) {
       console.log('fsm received event '+e+', changing state from ' + f + ' to ' + t)
-      console.log(State);
     }
   }
 });

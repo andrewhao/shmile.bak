@@ -213,13 +213,13 @@ PhotoView.prototype.zoomFrame = function(idx, dir, onfinish) {
 /**
  * Reset visibility, location of composite image for next round.
  */
-PhotoView.prototype.next = function() {
+PhotoView.prototype.slideInNext = function() {
     this.resetState();
     this.modalMessage('Next!');
     this.all.hide();
     this.all.translate(-WINDOW_WIDTH * 2, 0);
     this.animate('in', function() {
-        $('#start-button').fadeIn();
+      $('#start-button').fadeIn();
     });
 }
 
@@ -239,7 +239,7 @@ PhotoView.prototype.resetState = function () {
  * Faux camera flash
  */
 PhotoView.prototype.flashEffect = function(duration) {
-    if (!duration) { duration = 200; }
+    if (duration === undefined) { duration = 200; }
     var rect = this.canvas.rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     rect.attr({'fill': 'white', 'opacity': 0});
     rect.animate({'opacity': 1}, duration, ">", function() {

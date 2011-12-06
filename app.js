@@ -1,10 +1,12 @@
 // import module
 // also req: jade
-var express = require('express');
-var sys = require('sys');
-var cameraControl = require('./camera_control.js');
-var image_twiddle = require('./image_twiddler.js');
-var web = express.createServer();
+var express = require('express'),
+    sys = require('sys'),
+    camera_control = require('./camera_control.js'),
+    image_twiddle = require('./image_twiddler.js'),
+    web = express.createServer(),
+    exec = require('child_process').exec;
+
 // var redis = require('redis')
 
 web.configure(function(){
@@ -39,59 +41,49 @@ console.log('Web server listening on %s:%d', 'localhost', 3000);
 io.sockets.on('connection', function(websocket) {
   sys.puts('Web browser connected');
 
+  /*
+   * CAMERA RELATED EVENTS
+   */
   // Init the camera controller (gphoto2 lib)
-  camera = cameraControl();
+  var camera = camera_control();
 
   // Camera is beginning to prepare for the shutter snap.
   camera.on('camera_begin_snap', function() {
-    console.log('begin snap');
     websocket.emit('camera_begin_snap');
   });
 
   // Camera shutter has closed and the camera is now downloading the image.
   camera.on('camera_snapped', function() {
-    console.log('camera snapped');
     websocket.emit('camera_snapped');
   });
 
   // Camera photo is saved to the disk and ready for read.
   camera.on('photo_saved', function(filename, path, web_url) {
-    console.log('I saw the photo saved to '+filename);
     State.image_src_list.push(path);
-    console.log('Updated image list:'+State.image_src_list);    
     websocket.emit('photo_saved', {filename: filename, path: path, web_url: web_url});
   });
 
-  // Executed whenever I receive a msg from the Web client.
-  websocket.on('message', function(msg) {
-    console.log('message is: ' + msg);
-  });
-
+  /*
+   * BROWSER-RELATED EVENTS
+   */
   // The browser is letting me know I should execute a shutter snap.
   websocket.on('snap', function(isFirst) {
     camera.emit('snap', isFirst);
-    // do snap
-    // when done, it should emit "camera_snapped"
-    // when saved, it should emit "photo_saved"
-    // and be ready to receive another snap
   });
 
   // The browser is telling me to knit the images together.
-  // TODO/ahao This shouldn't be specified by the browser. It
-  // should be triggered on the final camera snap.
   websocket.on('composite', function() {
-    image_twiddle(State.image_src_list, null, function() {
-      console.log('clearing images');
+    var compositer = image_twiddle(State.image_src_list);
+    compositer.emit('composite');
+    // Reset when finished.
+    compositer.on('composited', function(output_file_path) {
+      console.log('Finished compositing image. Output image is at ', output_file_path);
+      // Clear the source list.
       State.image_src_list = [];
-    });
-  });
 
-  // The browser is telling me to print the image.
-  // TODO/ahao This shouldn't be dependent on the browser...
-  websocket.on('print', function() {
-    console.log('at this point, I should print the file');
-    // do print
-    // when done, it should emit "printed" (?)
+      // Print the image to the default printer.
+      exec('lpr ' + output_file_path);
+    });
   });
 
 });

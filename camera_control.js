@@ -4,19 +4,17 @@
  * https://github.com/underbluewaters/node-photobooth/blob/master/capture_photos.coffee
  */
 
-var EventEmitter = require('events').EventEmitter
-var spawn = require('child_process').spawn
+var EventEmitter = require('events').EventEmitter,
+    spawn = require('child_process').spawn,
+    exec = require('child_process').exec;
 
 var savingRegex = /Saving file as ([^.jpg]+)/g
 var capturedPhotoRegex = /New file is in/g
 
-var cameraControl = function(filename, cwd, web_root_path, numFrames) {
-  console.log('setting up cameraControl module');
+var camera_control = function(filename, cwd, web_root_path, numFrames) {
 
   // Make sure Mac OSX's PTP daemon is dead before we try to run gphoto.
-  spawn('killall', [
-    'PTPCamera'
-  ]);
+  exec('killall PTPCamera');
 
   if (filename === undefined) filename = "%m-%y-%d_%H:%M:%S.jpg";
   if (cwd === undefined) cwd = "public/photos";
@@ -53,4 +51,4 @@ var cameraControl = function(filename, cwd, web_root_path, numFrames) {
   return emitter;
 };
 
-module.exports = cameraControl
+module.exports = camera_control
