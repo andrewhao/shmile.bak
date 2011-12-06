@@ -10,6 +10,8 @@ With your digital camera, a laptop and a printer, you can have your own DIY low-
 
 Create your own custom overlay. Make sure it is a 4x6 crop factor, save it as a 24-bit transparent PNG. See `public/images/overlay.png` for an example.
 
+It is recommended that this overlay image is 2400x1600px large.
+
 When you are done, save your overlay resource into `public/images/overlay.png`.
 
 #### Camera Tips
@@ -25,7 +27,8 @@ When you are done, save your overlay resource into `public/images/overlay.png`.
 ### Deploying/running
 
 `node app.js`
-Browse to `localhost:3000` in your Web browser. This can either be a laptop computer or a camera.
+
+Browse to `localhost:3000` in a Grade A Web browser (Chrome and Safari latest recommended). This can either be a laptop computer or an iPad, if you'd like.
 
 Note that the `PTPCamera` daemon boots up whenever you plug in your camera. Running a `killall PTPCamera` will do the trick. Shmile automatically runs this command for you when you boot up.
 
