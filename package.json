@@ -36,10 +36,10 @@
        }
    ],
    "dependencies": {
-       "socket.io": "0.8.7",
+       "socket.io": ">=0.8.7",
        "express": ">=2.4.6",
-       "jade": "0.15.4",
-       "imagemagick": "0.1.2"
+       "jade": ">=0.15.4",
+       "imagemagick": ">=0.1.2"
    },
    "engines": ["node >=0.6.2"],
    "directories": {
