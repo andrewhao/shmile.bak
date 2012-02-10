@@ -1,5 +1,7 @@
 # shmile is a nodejs-based photobooth.
 
+## This project is now actively maintained at [porkbuns/shmile](http://www.github.com/porkbuns/shmile).
+
 ### Description
 
 With your digital camera, a laptop and a printer, you can have your own DIY low-cost photobooth.
