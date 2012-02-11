@@ -1,6 +1,6 @@
 function PhotoView() {
     this.container = $('#viewport');
-    this.canvas = new Raphael('viewport', WINDOW_WIDTH, WINDOW_HEIGHT);
+    this.canvas = new Raphael('viewport', Shmile.WINDOW_WIDTH, Shmile.WINDOW_HEIGHT);
     this.frames = this.canvas.set(); // List of SVG black rects
     this.images = this.canvas.set(); // List of SVG images
     this.all = this.canvas.set();
@@ -23,12 +23,12 @@ PhotoView.prototype.toString = function() {
 }
 
 PhotoView.prototype.render = function() {
-    var w = WINDOW_WIDTH - PHOTO_MARGIN;
-    var h = WINDOW_HEIGHT - PHOTO_MARGIN;
+    var w = Shmile.WINDOW_WIDTH - Shmile.PHOTO_MARGIN;
+    var h = Shmile.WINDOW_HEIGHT - Shmile.PHOTO_MARGIN;
     this.compositeDim = CameraUtils.scale4x6(w, h);
     this.compositeOrigin = {
-        x: (WINDOW_WIDTH - this.compositeDim.w) / 2,
-        y: (WINDOW_HEIGHT - this.compositeDim.h) / 2
+        x: (Shmile.WINDOW_WIDTH - this.compositeDim.w) / 2,
+        y: (Shmile.WINDOW_HEIGHT - this.compositeDim.h) / 2
     };
     this.compositeCenter = {
         x: this.compositeOrigin.x + (this.compositeDim.w/2),
@@ -98,7 +98,7 @@ PhotoView.prototype.render = function() {
     
     // Hide everything and move out of sight.
     this.all.hide();
-    this.all.translate(-WINDOW_WIDTH, 0);
+    this.all.translate(-Shmile.WINDOW_WIDTH, 0);
 }
 
 /**
@@ -138,11 +138,11 @@ PhotoView.prototype.animate = function(dir, cb) {
         this.images.hide();
         this.overlayImage.hide();
         this.all.animate({
-            'translation': WINDOW_WIDTH+",0"
+            'translation': Shmile.WINDOW_WIDTH+",0"
             }, 1000, "<>", cb);        
     } else if (dir === 'out') {
         this.all.animate({
-            'translation': WINDOW_WIDTH+",0"
+            'translation': Shmile.WINDOW_WIDTH+",0"
         }, 1000, "<>", cb);
     }
 }
@@ -217,7 +217,7 @@ PhotoView.prototype.slideInNext = function() {
     this.resetState();
     this.modalMessage('Next!');
     this.all.hide();
-    this.all.translate(-WINDOW_WIDTH * 2, 0);
+    this.all.translate(-Shmile.WINDOW_WIDTH * 2, 0);
     this.animate('in', function() {
       $('#start-button').fadeIn();
     });
@@ -240,7 +240,7 @@ PhotoView.prototype.resetState = function () {
  */
 PhotoView.prototype.flashEffect = function(duration) {
     if (duration === undefined) { duration = 200; }
-    var rect = this.canvas.rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    var rect = this.canvas.rect(0, 0, Shmile.WINDOW_WIDTH, Shmile.WINDOW_HEIGHT);
     rect.attr({'fill': 'white', 'opacity': 0});
     rect.animate({'opacity': 1}, duration, ">", function() {
         rect.animate({'opacity': 0}, duration, "<");
@@ -256,9 +256,9 @@ PhotoView.prototype.modalMessage = function(text, persistTime, animateSpeed, cb)
     if (animateSpeed === undefined) { var animateSpeed = 200; }
     if (persistTime === undefined) { var persistTime = 500; }
 
-    var sideLength = WINDOW_HEIGHT * 0.3;
-    var x = (WINDOW_WIDTH - sideLength)/2;
-    var y = (WINDOW_HEIGHT - sideLength)/2;
+    var sideLength = Shmile.WINDOW_HEIGHT * 0.3;
+    var x = (Shmile.WINDOW_WIDTH - sideLength)/2;
+    var y = (Shmile.WINDOW_HEIGHT - sideLength)/2;
     var all = this.canvas.set();
     var r = this.canvas.rect(x, y,
         sideLength,

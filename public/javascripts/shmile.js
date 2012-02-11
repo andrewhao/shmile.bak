@@ -1,9 +1,8 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
-
-var PHOTO_MARGIN = 50; // Margin for the composite photo per side
-var WINDOW_WIDTH = $(window).width();
-var WINDOW_HEIGHT = $(window).height() - 10;
+var Shmile = {
+  PHOTO_MARGIN: 50, // Margin for the composite photo per side
+  WINDOW_WIDTH: $(window).width(),
+  WINDOW_HEIGHT = $(window).height() - 10
+}
 
 // Current app state 
 var State = {
@@ -16,8 +15,8 @@ var State = {
 $(window).ready(function () {
   // init code
   startButton = $('button#start-button');
-  var buttonX = (WINDOW_WIDTH - startButton.outerWidth())/2;
-  var buttonY = (WINDOW_HEIGHT - startButton.outerHeight())/2;
+  var buttonX = (Shmile.WINDOW_WIDTH - startButton.outerWidth())/2;
+  var buttonY = (Shmile.WINDOW_HEIGHT - startButton.outerHeight())/2;
   
   startButton.hide();
   
