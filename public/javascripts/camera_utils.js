@@ -14,7 +14,7 @@ CameraUtils.snap = function(idx) {
     setTimeout(function() {
         p.modalMessage('Cheese!', 2000);
         p.flashEffect(2000);
-    }, 2000);
+    }, 5000);
     
 }
 

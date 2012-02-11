@@ -14,11 +14,12 @@ var TOTAL_HEIGHT = IMAGE_HEIGHT * 2 + IMAGE_PADDING * 3,
 image_twiddle = function(img_src_list, opts, cb) {
 
   if (img_src_list === undefined) img_src_list = null;
-  if (opts == null) {
+  if (opts === undefined) {
     opts = {
       overlay_src: 'public/images/overlay.png',
       tmp_dir: 'public/temp',
-      output_dir: 'public/photos/generated'
+      output_dir: 'public/photos/generated',
+      thumb_dir: 'public/photos/generated/thumbs'
     }
   }
 
@@ -33,7 +34,9 @@ image_twiddle = function(img_src_list, opts, cb) {
     var utcSeconds = (new Date()).valueOf(); // secs from epoch
     var IMAGE_GEOMETRY = IMAGE_WIDTH + 'x' + IMAGE_HEIGHT;
     var OUTPUT_PATH = opts.tmp_dir + '/out.jpeg';
-    var FINAL_OUTPUT_PATH = opts.output_dir + '/gen' + utcSeconds + '.jpeg';
+    var OUTPUT_FILE_NAME = utcSeconds + '.jpeg';
+    var FINAL_OUTPUT_PATH = opts.output_dir + '/' + 'gen_' + OUTPUT_FILE_NAME;
+    var FINAL_OUTPUT_THUMB_PATH = opts.thumb_dir + '/' + 'thumb_' + OUTPUT_FILE_NAME;
 
     var GEOMETRIES = [
       IMAGE_GEOMETRY + '+' + IMAGE_PADDING + "+" + IMAGE_PADDING,
@@ -71,7 +74,22 @@ image_twiddle = function(img_src_list, opts, cb) {
           throw error;
         }
         emitter.emit('composited', FINAL_OUTPUT_PATH);
+        doGenerateThumb();
       });
+    }
+
+    var resizeCompressArgs = [
+      '-size', '25%',
+      '-quality', '20',
+      FINAL_OUTPUT_PATH,
+      FINAL_OUTPUT_THUMB_PATH
+    ];
+
+    var doGenerateThumb = function() {
+      im.convert(resizeCompressArgs, function(e, out, err) {
+        if (err) throw err
+        emitter.emit('generated_thumb', FINAL_OUTPUT_THUMB_PATH)
+      })
     }
   });
   return emitter;

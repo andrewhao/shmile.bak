@@ -3,16 +3,14 @@ var express = require('express'),
     sys = require('sys'),
     fs = require('fs'),
     yaml = require('yaml'),
+    photo_file_utils = require('./photo_file_utils'),
     camera_control = require('./camera_control.js'),
     image_twiddle = require('./image_twiddler.js'),
     web = express.createServer(),
     exec = require('child_process').exec;
 
-Shmile = {};
-var yml = fs.readFileSync("config/shmile.yml", "ascii");
-// console.log(yml);
-// yml = yaml.eval(yml);
-// console.log(yml);
+// TODO/ahao
+var yml = fs.readFileSync("config/shmile.yml", "utf-8");
 
 web.configure(function(){
     web.set('views', __dirname + '/views');
@@ -23,15 +21,22 @@ web.configure(function(){
     web.use(express.static(__dirname + '/public'));
 });
 
+console.log()
+
 web.get('/', function(req, res) {
   res.render('index', {
-    title: 'shmile'
+    title: 'shmile',
+    extra_js: ['camera_utils', 'photo_view', 'shmile'],
+    extra_css: []
   });
 });
 
 web.get('/gallery', function(req, res) {
   res.render('gallery', {
-    title: 'gallery!'
+    title: 'gallery!',
+    extra_js: ['photoswipe/klass.min', 'code.photoswipe.jquery-3.0.4.min', 'shmile_gallery'],
+    extra_css: ['photoswipe/photoswipe'],
+    image_paths: photo_file_utils.composited_images(true)
   });
 });
 
@@ -76,10 +81,16 @@ io.sockets.on('connection', function(websocket) {
     camera.emit('snap', isFirst);
   });
 
+  // The browser is requesting an updated array of images
+  websocket.on('all_images', function() {
+    // TODO
+  });
+
   // The browser is telling me to knit the images together.
   websocket.on('composite', function() {
     var compositer = image_twiddle(State.image_src_list);
     compositer.emit('composite');
+
     // Reset when finished.
     compositer.on('composited', function(output_file_path) {
       console.log('Finished compositing image. Output image is at ', output_file_path);
@@ -87,8 +98,19 @@ io.sockets.on('connection', function(websocket) {
       State.image_src_list = [];
 
       // Print the image to the default printer.
-      exec('lpr ' + output_file_path);
+      // TODO change to config var
+      if (false) {
+        exec('lpr ' + output_file_path);
+      }
+      // Let all connected clients know there is a new composited image
+      websocket.broadcast.emit('composited_image', photo_file_utils.photo_path_to_url(output_file_path))
     });
+
+    compositer.on('generated_thumb', function(thumb_path) {
+      // Let all connected clients know there is a new thumb image
+      websocket.broadcast.emit('generated_thumb', photo_file_utils.photo_path_to_url(thumb_path));
+    });
+
   });
 
 });

@@ -4,12 +4,21 @@ html
     title= title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/shmile.css')
+
+    each css_file in extra_css
+      link(rel='stylesheet', href='/css/' + css_file + '.css')
+
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='viewport', content="initial-scale=1.0, user-scalable=no")
+    meta(name='apple-mobile-web-app-status-bar-style', content='black-translucent')
+
     script(type='text/javascript', src='/javascripts/jquery-1.6.1.min.js')
     script(type='text/javascript', src='/socket.io/socket.io.js')
     script(type='text/javascript', src='/javascripts/raphael-min.js')
     script(type='text/javascript', src='/javascripts/state-machine.min.js')
     script(type='text/javascript', src='/javascripts/underscore-min.js')
-    script(type='text/javascript', src='/javascripts/camera_utils.js')
-    script(type='text/javascript', src='/javascripts/photo_view.js')    
-    script(type='text/javascript', src='/javascripts/shmile.js')
+
+    each js_file in extra_js
+      script(type='text/javascript', src='/javascripts/' + js_file + '.js')
+
   body.nicegradient!= body
