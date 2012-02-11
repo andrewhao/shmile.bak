@@ -12,15 +12,11 @@ $(document).ready(function(){
 // Set up the socket
 var socket = io.connect('/')
 
-socket.on('message', function(data) {
-  console.log('data is' + data);
-});
-
 socket.on('connect', function() {
   console.log('connected evt');
-  fsm.connected();
 });
 
+// Everytime a new image is saved, notify and update the PhotoSwipe view.
 socket.on('generated_thumb', function(url) {
   console.log('generated_thumb evt: '+url);
 
@@ -37,30 +33,4 @@ socket.on('generated_thumb', function(url) {
 
   gallery.cache.images.push(new Code.PhotoSwipe.Image.ImageClass(a, src, caption, metaData))
 
-});
-
-/*
- * STATE MACHINE DEFINITION
- * Keep track of app state and logic.
- *
- * + loading
- *   - connected() -> ready
- * + ready
- *   - photo_saved() -> (update gallery)
-
- */
-var fsm = StateMachine.create({
-  initial: 'loading',
-  events: [
-    { name: 'connected', from: 'loading', to: 'ready' },
-  ],
-  callbacks: {
-    onconnected: function() {
-    },
-    onenterready: function() {
-    },
-    onchangestate: function(e, f, t) {
-      console.log('fsm received event '+e+', changing state from ' + f + ' to ' + t)
-    }
-  }
 });
