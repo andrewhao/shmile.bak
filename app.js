@@ -1,11 +1,18 @@
 // import module
-// also req: jade
 var express = require('express'),
     sys = require('sys'),
+    fs = require('fs'),
+    yaml = require('yaml'),
     camera_control = require('./camera_control.js'),
     image_twiddle = require('./image_twiddler.js'),
     web = express.createServer(),
     exec = require('child_process').exec;
+
+Shmile = {};
+var yml = fs.readFileSync("config/shmile.yml", "ascii");
+// console.log(yml);
+// yml = yaml.eval(yml);
+// console.log(yml);
 
 web.configure(function(){
     web.set('views', __dirname + '/views');
@@ -22,13 +29,19 @@ web.get('/', function(req, res) {
   });
 });
 
+web.get('/gallery', function(req, res) {
+  res.render('gallery', {
+    title: 'gallery!'
+  });
+});
+
+// FIXME Bleh, shouldn't be tracked in a global...
 State = {
   image_src_list: []
 };
 
 var io = require('socket.io').listen(web);
-web.listen(3000, 'localhost');
-console.log('Web server listening on %s:%d', 'localhost', 3000);
+web.listen(3000);
 
 io.sockets.on('connection', function(websocket) {
   sys.puts('Web browser connected');

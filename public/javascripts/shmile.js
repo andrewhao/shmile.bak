@@ -1,7 +1,7 @@
 var Shmile = {
   PHOTO_MARGIN: 50, // Margin for the composite photo per side
   WINDOW_WIDTH: $(window).width(),
-  WINDOW_HEIGHT = $(window).height() - 10
+  WINDOW_HEIGHT: $(window).height() - 10
 }
 
 // Current app state 
@@ -37,7 +37,7 @@ $(window).ready(function () {
 /*****************************************************************************/
 
 // Set up the socket
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect('/')
 
 socket.on('message', function(data) {
   console.log('data is' + data);
