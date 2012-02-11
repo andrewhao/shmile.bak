@@ -5,7 +5,6 @@ var PhotoFileUtils = (function() {
 
   var GENERATED_PHOTOS_PATH = 'public/photos/generated'
   var GENERATED_THUMBS_PATH = 'public/photos/generated/thumbs'
-  var GENERATED_PHOTOS_URL = 'photos/generated'
 
   /**
    * Return an array of all files in the dir.
@@ -19,7 +18,7 @@ var PhotoFileUtils = (function() {
     for (i in files) {
       var file = files[i];
       if (file.match(/jpeg$/)) {
-        var prefix = (wantUrlPrefix) ? GENERATED_PHOTOS_URL + '/' : '';
+        var prefix = (wantUrlPrefix) ? photo_path_to_url(path) + '/' : '';
         ret.push(prefix + file);
       }
     }

@@ -35,7 +35,7 @@ socket.on('generated_thumb', function(url) {
   var caption = gallery.settings.getImageCaption(a[0]);
   var metaData = gallery.settings.getImageMetaData(a[0]);
 
-  gallery.cache.images.push(new Code.PhotoSwipe.Image.ImageClass(img, src, caption, metaData))
+  gallery.cache.images.push(new Code.PhotoSwipe.Image.ImageClass(a, src, caption, metaData))
 
 });
 
