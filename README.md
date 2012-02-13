@@ -48,7 +48,8 @@ This is a Web browser that displays the camera control interface, and shows the 
 This is a Web browser instance that displays a view of all the generated images taken so far.
 
 1. With the server already running on another browser instance, visit `http://localhost:3000/gallery` (or `<server_address>:3000/gallery` if you're connecting over a network)
-2. You should see a touchable, swipeable list of images that have already been taken.
+2. If you're viewing on iPad, open the site in Safari, then save it as a Home Screen app as detailed above. Open the "gallery!" app from your home screen.
+3. You should see a touchable, swipeable list of images that have already been taken. As photos are taken, the new images will be pushed to this Web view in the background.
 
 Note: this is currently buggy and will not work if you don't have any images taken yet. Visit this view when a few photos have been generated.
 
