@@ -40,6 +40,7 @@ When you are done, save your overlay resource into `public/images/overlay.png`.
 ### Credits
 
 * gphoto/node integration was inspired by https://github.com/underbluewaters/node-photobooth
+* Touch-enabled Web gallery interface courtesy of [PhotoSwipe](http://www.photoswipe.com). Fork it: https://github.com/codecomputerlove/PhotoSwipe
 * shmile is a port of [boink](http://github.com/andrewhao/boink), the original Rails-based photobooth written by Glen Wong and myself.
 
 ### License
