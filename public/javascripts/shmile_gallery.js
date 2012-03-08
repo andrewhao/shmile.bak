@@ -3,6 +3,7 @@ $(document).ready(function(){
     autoStartSlideshow: true,
     slideshowDelay: 5000,
     cacheMode: Code.PhotoSwipe.Cache.Mode.normal,
+    slideTimingFunction: "ease-in-out",
     loop: true
   };
   gallery = $("#image-list a").photoSwipe(opts);
