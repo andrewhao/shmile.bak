@@ -9,9 +9,6 @@ var express = require('express'),
     web = express.createServer(),
     exec = require('child_process').exec;
 
-// TODO/ahao
-var yml = fs.readFileSync("config/shmile.yml", "utf-8");
-
 web.configure(function(){
     web.set('views', __dirname + '/views');
     web.set('view engine', 'jade');
