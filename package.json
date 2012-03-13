@@ -32,7 +32,7 @@
    "repositories": [
        {
            "type": "git",
-           "url": "http://github.com:andrewhao/shmile.git"
+           "url": "http://github.com:porkbuns/shmile.git"
        }
    ],
    "dependencies": {
