@@ -1,6 +1,6 @@
 {
    "name": "shmile",
-   "version": "0.1.0",
+   "version": "0.1.5",
    "description": "Photobooth controller for Node.",
    "keywords": [
        "nodejs" ,
