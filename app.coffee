@@ -3,8 +3,8 @@ sys = require("sys")
 fs = require("fs")
 yaml = require("yaml")
 photo_file_utils = require("./photo_file_utils")
-camera_control = require("./camera_control.js")
-image_twiddle = require("./image_twiddler.js")
+camera_control = require("./camera_control")
+image_twiddle = require("./image_twiddler")
 web = express.createServer()
 exec = require("child_process").exec
 web.configure ->
