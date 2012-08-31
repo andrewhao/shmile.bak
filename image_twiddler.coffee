@@ -19,11 +19,11 @@ image_twiddle = (img_src_list, opts, cb) ->
   emitter.on "composite", ->
     convertArgs = [ "-size", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, "canvas:white" ]
     utcSeconds = (new Date()).valueOf()
-    IMAGE_GEOMETRY = IMAGE_WIDTH + "x" + IMAGE_HEIGHT
-    OUTPUT_PATH = opts.tmp_dir + "/out.jpeg"
-    OUTPUT_FILE_NAME = utcSeconds + ".jpeg"
-    FINAL_OUTPUT_PATH = opts.output_dir + "/" + "gen_" + OUTPUT_FILE_NAME
-    FINAL_OUTPUT_THUMB_PATH = opts.thumb_dir + "/" + "thumb_" + OUTPUT_FILE_NAME
+    IMAGE_GEOMETRY = "#{IMAGE_WIDTH}x#{IMAGE_HEIGHT}"
+    OUTPUT_PATH = "#{opts.tmp_dir}/out.jpeg"
+    OUTPUT_FILE_NAME = "#{utcSeconds}.jpeg"
+    FINAL_OUTPUT_PATH = "#{opts.output_dir}/gen_#{OUTPUT_FILE_NAME}"
+    FINAL_OUTPUT_THUMB_PATH = "#{opts.thumb_dir}/thumb_#{OUTPUT_FILE_NAME}"
     GEOMETRIES = [ IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + (IMAGE_HEIGHT + 2 * IMAGE_PADDING), IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + (2 * IMAGE_PADDING + IMAGE_HEIGHT) ]
     i = 0
 
