@@ -1,28 +1,33 @@
-express = require("express")
-sys = require("sys")
-fs = require("fs")
-yaml = require("yaml")
+express = require "express"
+jade = require "jade"
+http = require "http"
+sys = require "sys"
+fs = require "fs"
+yaml = require "yaml"
 photo_file_utils = require("./photo_file_utils")
 camera_control = require("./camera_control")
 image_twiddle = require("./image_twiddler")
-web = express.createServer()
-exec = require("child_process").exec
-web.configure ->
-  web.set "views", __dirname + "/views"
-  web.set "view engine", "jade"
-  web.use express.bodyParser()
-  web.use express.methodOverride()
-  web.use web.router
-  web.use express.static(__dirname + "/public")
 
-console.log()
-web.get "/", (req, res) ->
+exp = express()
+web = http.createServer(exp)
+
+exec = require("child_process").exec
+
+exp.configure ->
+  exp.set "views", __dirname + "/views"
+  exp.set "view engine", "jade"
+  exp.use express.bodyParser()
+  exp.use express.methodOverride()
+  exp.use exp.router
+  exp.use express.static(__dirname + "/public")
+
+exp.get "/", (req, res) ->
   res.render "index",
     title: "shmile"
     extra_js: [ "camera_utils", "photo_view", "shmile" ]
     extra_css: []
 
-web.get "/gallery", (req, res) ->
+exp.get "/gallery", (req, res) ->
   res.render "gallery",
     title: "gallery!"
     extra_js: [ "photoswipe/klass.min", "code.photoswipe.jquery-3.0.4.min", "shmile_gallery" ]

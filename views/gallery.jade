@@ -1,6 +1,12 @@
-section#viewport
-  ul#image-list
-    each image_path in image_paths
-      li
-        a(href=image_path)
-          img(src=image_path)
+extends layout
+
+block title
+  = "shmile gallery"
+
+block content
+  section#viewport
+    ul#image-list
+      each image_path in image_paths
+        li
+          a(href=image_path)
+            img(src=image_path)

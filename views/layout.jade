@@ -1,7 +1,8 @@
 !!! 5
 html
   head
-    title= title
+    title
+      block title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/shmile.css')
 
@@ -21,4 +22,5 @@ html
     each js_file in extra_js
       script(type='text/javascript', src='/javascripts/' + js_file + '.js')
 
-  body.nicegradient!= body
+  body.nicegradient
+    block content
