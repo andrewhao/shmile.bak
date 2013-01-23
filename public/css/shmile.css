@@ -55,34 +55,5 @@ button#start-button {
     box-shadow:0 0.3em 1em rgba(0,0,0,0.8);
     text-shadow: 0 -1px 2px rgba(0,0,0,0.2);
 }
-.green.awesome, .green.awesome:visited      { background-color: #91bd09; }
-.green.awesome:hover                        { background-color: #749a02; }
-.blue.awesome, .blue.awesome:visited        { background-color: #2daebf; }
-.blue.awesome:hover                         { background-color: #007d9a; }
-.red.awesome, .red.awesome:visited          { background-color: #e33100; }
-.red.awesome:hover                          { background-color: #872300; }
-.magenta.awesome, .magenta.awesome:visited      { background-color: #a9014b; }
-.magenta.awesome:hover                          { background-color: #630030; }
-.orange.awesome, .orange.awesome:visited        { background-color: #ff5c00; }
-.orange.awesome:hover                           { background-color: #d45500; }
-.yellow.awesome, .yellow.awesome:visited        { background-color: #ffb515; }
-.yellow.awesome:hover                           { background-color: #fc9200; }
-
 .boinkyellow.awesome, .boinkyellow.awesome:visited        { background-color: #F5BE1B; }
 .boinkyellow.awesome:hover                           { background-color: #fc9200; }
-
-
- /* 
-  * Now make em glow. The green one at least.
-  * http://www.zurb.com/playground/radioactive-buttons
-  */
-button.awesome.boinkyellow {
-    -webkit-animation-name: yellowPulse;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-}
-@-webkit-keyframes yellowPulse {
-    from { background-color: #F5BE1B; margin-top: 0; }
-    50% { background-color: #FFD000; margin-top: 10px; }
-    to { background-color: #F5BE1B; margin-top: 0; }
-}

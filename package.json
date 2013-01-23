@@ -1,6 +1,6 @@
 {
    "name": "shmile",
-   "version": "0.1.0",
+   "version": "0.1.6",
    "description": "Photobooth controller for Node.",
    "keywords": [
        "nodejs" ,
@@ -32,16 +32,17 @@
    "repositories": [
        {
            "type": "git",
-           "url": "http://github.com:andrewhao/shmile.git"
+           "url": "http://github.com:porkbuns/shmile.git"
        }
    ],
    "dependencies": {
-       "socket.io": "0.8.7",
+       "socket.io": ">=0.8.7",
        "express": ">=2.4.6",
-       "jade": "0.15.4",
-       "imagemagick": "0.1.2"
+       "jade": ">=0.15.4",
+       "imagemagick": ">=0.1.2",
+       "yaml": ">=0.2.3"
    },
-   "engines": ["node >=0.6.2"],
+   "engines": ["node >=0.6.11"],
    "directories": {
        "lib": "lib"
    }

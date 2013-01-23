@@ -12,9 +12,9 @@ CameraUtils.snap = function(idx) {
     p.zoomFrame(idx, 'in');
     p.modalMessage('Ready?', 2000);
     setTimeout(function() {
-        p.modalMessage('Cheese!', 2000);
-        p.flashEffect(2000);
-    }, 2000);
+        p.modalMessage('Cheese!', 4000);
+        p.flashEffect(4000);
+    }, 5000);
     
 }
 
