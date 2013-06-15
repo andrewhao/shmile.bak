@@ -5,7 +5,7 @@ sys = require "sys"
 fs = require "fs"
 yaml = require "yaml"
 photo_file_utils = require("./photo_file_utils")
-camera_control = require("./CameraControl")
+CameraControl = require("./CameraControl")
 image_twiddle = require("./image_twiddler")
 
 exp = express()

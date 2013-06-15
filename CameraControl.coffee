@@ -10,26 +10,26 @@ exec = require("child_process").exec
 # guest...
 ###
 class CameraControl
-  SAVING_REGEX: /Saving file as ([^.jpg]+)/g
-  CAPTURED_PHOTO_REGEX: /New file is in/g
+  saving_regex: /Saving file as ([^.jpg]+)/g
+  captured_success_regex: /New file is in/g
 
-  constructor: (@filename="%m-%y-%d_%H:%M:%S.jpg", @cwd="public/photos", @web_root_path="/photos", @numFrames) ->
+  constructor: (@filename="%m-%y-%d_%H:%M:%S.jpg", @cwd="public/photos", @web_root_path="/photos") ->
 
   init: ->
     exec "killall PTPCamera"
     emitter = new EventEmitter()
-    emitter.on "snap", ->
+    emitter.on "snap", =>
       emitter.emit "camera_begin_snap"
       console.log "snapping..."
       capture = spawn("gphoto2", [ "--capture-image-and-download", "--force-overwrite", "--filename=" + @filename ],
         cwd: @cwd
       )
       console.log "capture object is " + capture
-      capture.stdout.on "data", (data) ->
-        if @CAPTURED_PHOTO_REGEX.exec(data.toString())
+      capture.stdout.on "data", (data) =>
+        if @captured_success_regex.exec(data.toString())
           console.log "camera snapped!"
           emitter.emit "camera_snapped"
-        saving = @SAVING_REGEX.exec(data.toString())
+        saving = @saving_regex.exec(data.toString())
         if saving
           fname = saving[1] + ".jpg"
           console.log "saved to " + fname

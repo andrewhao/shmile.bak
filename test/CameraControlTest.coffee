@@ -15,8 +15,5 @@ describe "#init", ->
 describe "events", ->
   describe "on 'snap'", ->
     it "emits 'camera_begin_snap'", ->
-      @cc = new CameraControl()
-      @cc.on "camera_begin_snap", ->
-        done()
-
+      @cc = new CameraControl().init()
       @cc.emit "snap"
