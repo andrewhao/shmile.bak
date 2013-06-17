@@ -6,7 +6,7 @@ fs = require "fs"
 yaml = require "yaml"
 photo_file_utils = require("./photo_file_utils")
 CameraControl = require("./CameraControl")
-image_twiddle = require("./image_twiddler")
+ImageTwiddler = require("./ImageTwiddler")
 
 exp = express()
 web = http.createServer(exp)
@@ -59,7 +59,7 @@ io.sockets.on "connection", (websocket) ->
   websocket.on "all_images", ->
 
   websocket.on "composite", ->
-    compositer = image_twiddle(State.image_src_list)
+    compositer = new ImageTwiddler(State.image_src_list).init()
     compositer.emit "composite"
     compositer.on "composited", (output_file_path) ->
       console.log "Finished compositing image. Output image is at ", output_file_path
