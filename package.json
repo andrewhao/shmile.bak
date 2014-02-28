@@ -1,54 +1,40 @@
 {
- "name": "shmile",
- "version": "0.1.6",
- "description": "Photobooth controller for Node.",
- "keywords": [
- "nodejs" ,
- "photos",
- "photobooth",
- "photo booth",
- "camera",
- "gphoto2",
- "photography",
- "party"
- ],
- "maintainers": [
- {
-   "name": "Andrew Hao",
-   "email": "andrewhao@gmail.com",
-   "web": "http://www.g9labs.com"
- }
- ],
- "licenses": [
-   {
-   "type": "GPLv2",
-   "url": "http://www.example.org/licenses/gpl.html"
-   },
-   {
-     "type": "MIT",
-     "url": "http://www.opensource.org/licenses/MIT"
-   }
-   ],
- "repositories": [
-   {
-     "type": "git",
-     "url": "http://github.com:porkbuns/shmile.git"
-   }
- ],
- "dependencies": {
-   "socket.io": ">=0.8.7",
-   "express": ">=2.4.6",
-   "jade": ">=0.15.4",
-   "imagemagick": ">=0.1.2",
-   "yaml": ">=0.2.3",
-   "coffee-script": ">= 1.6.3"
-   },
- "devDependencies": {
-  "chai": "*",
-  "mocha": "*"
- },
- "engines": ["node >=0.8.0"],
- "directories": {
-   "lib": "lib"
- }
+    "name": "shmile",
+    "version": "0.1.6",
+    "author": "Andrew Hao <andrewhao@gmail.com> (http://www.g9labs.com)",
+    "description": "Photobooth controller for Node.",
+    "keywords": [
+        "nodejs" ,
+        "photos",
+        "photobooth",
+        "photo booth",
+        "camera",
+        "gphoto2",
+        "photography",
+        "party"
+    ],
+    "scripts": {
+        "start": "node_modules/.bin/coffee app.coffee"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com:porkbuns/shmile.git"
+    },
+    "dependencies": {
+        "socket.io": "~0.9.16",
+        "express": "~3.4.8",
+        "jade": "~1.2.0",
+        "imagemagick": "~0.1.3",
+        "yaml": "~0.2.3",
+        "coffee-script": "~1.7.1"
+    },
+    "devDependencies": {
+        "chai": "*",
+        "mocha": "*"
+    },
+    "engines": ["node >=0.8.0"],
+    "directories": {
+        "lib": "lib"
+    }
 }
