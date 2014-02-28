@@ -16,7 +16,7 @@ exec = require("child_process").exec
 exp.configure ->
   exp.set "views", __dirname + "/views"
   exp.set "view engine", "jade"
-  exp.use express.bodyParser()
+  exp.use express.json()
   exp.use express.methodOverride()
   exp.use exp.router
   exp.use express.static(__dirname + "/public")
