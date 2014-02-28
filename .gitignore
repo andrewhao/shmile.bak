@@ -3,4 +3,4 @@ node_modules
 temp
 .DS_Store
 public/photos/*jp*g
-
+public/photos/**/*jp*g
