@@ -14,7 +14,8 @@
     "party"
   ],
   "scripts": {
-    "start": "node_modules/.bin/coffee app.coffee"
+    "start": "node_modules/.bin/coffee app.coffee",
+    "test": "gulp test"
   },
   "license": "MIT",
   "repository": {
