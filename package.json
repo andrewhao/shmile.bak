@@ -33,8 +33,8 @@
   "devDependencies": {
     "gulp": "~3.6.2",
     "chai": "*",
-    "mocha": "*",
-    "gulp-mocha": "~0.4.1"
+    "mocha": "~1.19.0",
+    "gulp-spawn-mocha": "~0.1.4"
   },
   "engines": [
     "node >=0.8.0"
