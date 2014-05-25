@@ -32,12 +32,31 @@ When you are done, save your overlay resource into `public/images/overlay.png`.
 
 #### Server instance
 
-The server is responsible for controlling the camera, and serving the Web interface that users will see.
+The server is responsible for controlling the camera, and serving the Web interface that users will see. Here we assume that you already have [Homebrew](http://brew.sh/) installed and running on your Mac.
 
-1. Go to project root.
-2. `npm install` to install the node package dependencies.
-3. Install [`gphoto2`](http://www.gphoto.org/proj/gphoto2/). I'm installing with `brew`. Run `brew install gphoto2`
-3. Run `coffee app.coffee` to start the server application.
+### Install node & npm
+
+I've currently tested this app against `node 0.10`.
+
+    $ brew install node
+
+### Install imagemagick
+
+    $ brew install imagemagick
+
+### Install [`gphoto2`](http://www.gphoto.org/proj/gphoto2/)
+
+    $ brew install gphoto2
+
+### Get the project running.
+
+Go to project root. We assume that you've checked out this repo into `/path/to/shmile`.
+
+    $ cd /path/to/shmile
+    $ npm install
+    $ coffee app.coffee
+
+The server should begin running.
 
 #### Control interface
 
