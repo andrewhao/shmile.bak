@@ -1,11 +1,16 @@
 chai = require("chai").should()
-CameraControl = require "../lib/camera_control"
+rewire = require "rewire"
+# rewire to inject a stub spawn/exec.
+CameraControl = rewire "../lib/camera_control"
 EventEmitter = require("events").EventEmitter
 
 describe "CameraControl", ->
   # Install stubs for system-level commands.
   beforeEach ->
-    console.log "before this test"
+    CameraControl.__set__("exec", -> {})
+    CameraControl.__set__("spawn", -> {
+      stdout: {on: -> {}}
+    })
 
   describe "#constructor", ->
     it "should be a CameraControl", ->
