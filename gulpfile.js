@@ -1,14 +1,25 @@
 var gulp = require('gulp');
-var mocha = require('gulp-mocha');
+var mocha = require('gulp-spawn-mocha');
 
 gulp.task("test", function() {
-  require('coffee-script/register');
-  gulp.src("test/**/*.coffee")
-  .pipe(mocha({
-    reporter: "spec"
-  }));
+  return test().on('error', function(e) {
+    throw e;
+  });
 });
 
 gulp.task("default", function() {
-  console.log("Do the default thing!");
+  gulp.start('watch');
 });
+
+gulp.task("watch", function() {
+  gulp.watch("{app,test}/*", test);
+});
+
+var test = function() {
+  return gulp.src(["test/**/*.coffee"]).pipe(mocha({
+    bin: "node_modules/.bin/mocha",
+    reporter: "spec",
+    compilers: "coffee:coffee-script/register"
+  })).on("error", console.warn.bind(console));
+};
+

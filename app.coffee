@@ -4,9 +4,9 @@ http = require "http"
 sys = require "sys"
 fs = require "fs"
 yaml = require "yaml"
-photo_file_utils = require("./photo_file_utils")
-CameraControl = require("./CameraControl")
-ImageTwiddler = require("./ImageTwiddler")
+PhotoFileUtils = require("./lib/photo_file_utils")
+CameraControl = require("./lib/camera_control")
+ImageTwiddler = require("./lib/image_twiddler")
 
 exp = express()
 web = http.createServer(exp)
@@ -32,7 +32,7 @@ exp.get "/gallery", (req, res) ->
     title: "gallery!"
     extra_js: [ "photoswipe/klass.min", "code.photoswipe.jquery-3.0.4.min", "shmile_gallery" ]
     extra_css: [ "photoswipe/photoswipe" ]
-    image_paths: photo_file_utils.composited_images(true)
+    image_paths: PhotoFileUtils.composited_images(true)
 
 State = image_src_list: []
 io = require("socket.io").listen(web)
@@ -67,7 +67,7 @@ io.sockets.on "connection", (websocket) ->
       if true #FIXMEEEEE
         console.log "Printing image at ", output_file_path
         exec "lpr " + output_file_path
-      websocket.broadcast.emit "composited_image", photo_file_utils.photo_path_to_url(output_file_path)
+      websocket.broadcast.emit "composited_image", PhotoFileUtils.photo_path_to_url(output_file_path)
 
     compositer.on "generated_thumb", (thumb_path) ->
-      websocket.broadcast.emit "generated_thumb", photo_file_utils.photo_path_to_url(thumb_path)
+      websocket.broadcast.emit "generated_thumb", PhotoFileUtils.photo_path_to_url(thumb_path)
