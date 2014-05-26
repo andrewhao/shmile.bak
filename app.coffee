@@ -4,9 +4,9 @@ http = require "http"
 sys = require "sys"
 fs = require "fs"
 yaml = require "yaml"
-PhotoFileUtils = require("lib/photo_file_utils")
-CameraControl = require("lib/camera_control")
-ImageTwiddler = require("lib/image_twiddler")
+PhotoFileUtils = require("./lib/photo_file_utils")
+CameraControl = require("./lib/camera_control")
+ImageTwiddler = require("./lib/image_twiddler")
 
 exp = express()
 web = http.createServer(exp)
