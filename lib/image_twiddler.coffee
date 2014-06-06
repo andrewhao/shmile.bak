@@ -9,6 +9,7 @@ IMAGE_PADDING = 50
 TOTAL_HEIGHT = IMAGE_HEIGHT * 2 + IMAGE_PADDING * 3
 TOTAL_WIDTH = IMAGE_WIDTH * 2 + IMAGE_PADDING * 3
 
+# Composites an array of four images into the final grid-based image asset.
 class ImageTwiddler
   defaults:
     overlay_src: "public/images/overlay.png"
@@ -39,21 +40,26 @@ class ImageTwiddler
         convertArgs.push "-composite"
         i++
       convertArgs.push OUTPUT_PATH
-      im.convert convertArgs, (err, stdout, stderr) =>
-        throw err  if err
-        emitter.emit "laid_out", OUTPUT_PATH
-        doCompositing()
+      im.convert(
+        convertArgs,
+        (err, stdout, stderr) ->
+          throw err  if err
+          console.log("emitter.emit is: #{emitter.emit}")
+          console.log("OUTPUT_PATH is: #{OUTPUT_PATH}")
+          emitter.emit "laid_out", OUTPUT_PATH
+          #doCompositing()
+      )
 
       doCompositing = =>
         compositeArgs = [ "-gravity", "center", @opts.overlay_src, OUTPUT_PATH, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, FINAL_OUTPUT_PATH ]
-        exec "composite " + compositeArgs.join(" "), (error, stderr, stdout) =>
+        exec "composite " + compositeArgs.join(" "), (error, stderr, stdout) ->
           throw error  if error
           emitter.emit "composited", FINAL_OUTPUT_PATH
           doGenerateThumb()
 
       resizeCompressArgs = [ "-size", "25%", "-quality", "20", FINAL_OUTPUT_PATH, FINAL_OUTPUT_THUMB_PATH ]
       doGenerateThumb = =>
-        im.convert resizeCompressArgs, (e, out, err) =>
+        im.convert resizeCompressArgs, (e, out, err) ->
           throw err  if err
           emitter.emit "generated_thumb", FINAL_OUTPUT_THUMB_PATH
 
