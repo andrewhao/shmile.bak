@@ -1,4 +1,4 @@
-chai = require("chai").should()
+expect = require("chai").expect
 rewire = require "rewire"
 # rewire to inject a stub spawn/exec.
 CameraControl = rewire "../lib/camera_control"
@@ -15,12 +15,12 @@ describe "CameraControl", ->
   describe "#constructor", ->
     it "should be a CameraControl", ->
       cc = new CameraControl()
-      cc.should.be.instanceof(CameraControl)
+      expect(cc).to.be.instanceof(CameraControl)
 
   describe "#init", ->
     it "returns EventEmitter", ->
       ee = new CameraControl().init()
-      ee.should.be.instanceof(EventEmitter)
+      expect(ee).to.be.instanceof(EventEmitter)
 
   describe "events", ->
     describe "on 'snap'", ->
