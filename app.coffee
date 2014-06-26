@@ -4,6 +4,10 @@ http = require "http"
 sys = require "sys"
 fs = require "fs"
 yaml = require "yaml"
+dotenv = require "dotenv"
+
+dotenv.load()
+console.log("printer is: #{process.env.PRINTER_ENABLED}")
 PhotoFileUtils = require("./lib/photo_file_utils")
 CameraControl = require("./lib/camera_control")
 ImageTwiddler = require("./lib/image_twiddler")
@@ -64,9 +68,11 @@ io.sockets.on "connection", (websocket) ->
     compositer.on "composited", (output_file_path) ->
       console.log "Finished compositing image. Output image is at ", output_file_path
       State.image_src_list = []
-      if true #FIXMEEEEE
+
+      # Control this with PRINTER=true or PRINTER=false
+      if process.env.PRINTER_ENABLED is "true"
         console.log "Printing image at ", output_file_path
-        exec "lpr " + output_file_path
+        exec "lpr -o #{process.env.PRINTER_IMAGE_ORIENTATION} -o media=\"#{process.env.PRINTER_MEDIA}\" #{output_file_path}"
       websocket.broadcast.emit "composited_image", PhotoFileUtils.photo_path_to_url(output_file_path)
 
     compositer.on "generated_thumb", (thumb_path) ->
