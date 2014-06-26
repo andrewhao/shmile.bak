@@ -4,16 +4,17 @@ ImageTwiddler = rewire "../lib/image_twiddler"
 EventEmitter = require("events").EventEmitter
 sinon = require "sinon"
 
+fakeExec = (command, cb) ->
+
 fakeImageMagick = {
   convert: (convertArgs, cb) ->
-    console.log convertArgs
-    console.log cb
     cb()
 }
 
 describe "ImageTwiddler", ->
   beforeEach ->
     ImageTwiddler.__set__("im", fakeImageMagick)
+    ImageTwiddler.__set__("exec", fakeExec)
     @images = [
       "test/fixtures/images/1.jpg",
       "test/fixtures/images/2.jpg",
