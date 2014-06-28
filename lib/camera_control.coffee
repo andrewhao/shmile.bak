@@ -22,8 +22,6 @@ class CameraControl
     exec "killall PTPCamera"
     emitter = new EventEmitter()
     emitter.on "snap", (onCaptureSuccess, onSaveSuccess) =>
-      #console.log(onSaveSuccess)
-      #console.log(onCaptureSuccess)
       emitter.emit "camera_begin_snap"
       capture = spawn("gphoto2", [ "--capture-image-and-download",
                                    "--force-overwrite",
@@ -32,14 +30,11 @@ class CameraControl
       )
       capture.stdout.on "data", (data) =>
         if @captured_success_regex.exec(data.toString())
-          console.log("in: #{onCaptureSuccess}")
           emitter.emit "camera_snapped"
           onCaptureSuccess() if onCaptureSuccess?
 
         saving = @saving_regex.exec(data.toString())
         if saving
-          console.log("saving: #{saving}")
-          console.log("in: #{onSaveSuccess}")
           fname = saving[1] + ".jpg"
           emitter.emit(
             "photo_saved",
