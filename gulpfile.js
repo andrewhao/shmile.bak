@@ -2,17 +2,15 @@ var gulp = require('gulp');
 var mocha = require('gulp-spawn-mocha');
 
 gulp.task("test", function() {
-  return test().on('error', function(e) {
-    throw e;
-  });
+  return test()
 });
 
 gulp.task("default", function() {
-  gulp.start('watch');
+  gulp.start('test');
 });
 
 gulp.task("watch", function() {
-  gulp.watch("{lib,test}/*", test);
+  gulp.watch("test/*", test);
 });
 
 var test = function() {

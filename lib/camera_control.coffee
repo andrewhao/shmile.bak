@@ -21,7 +21,7 @@ class CameraControl
   init: ->
     exec "killall PTPCamera"
     emitter = new EventEmitter()
-    emitter.on "snap", =>
+    emitter.on "snap", (onCaptureSuccess, onSaveSuccess) =>
       emitter.emit "camera_begin_snap"
       capture = spawn("gphoto2", [ "--capture-image-and-download",
                                    "--force-overwrite",
@@ -31,6 +31,8 @@ class CameraControl
       capture.stdout.on "data", (data) =>
         if @captured_success_regex.exec(data.toString())
           emitter.emit "camera_snapped"
+          onCaptureSuccess() if onCaptureSuccess?
+
         saving = @saving_regex.exec(data.toString())
         if saving
           fname = saving[1] + ".jpg"
@@ -40,6 +42,7 @@ class CameraControl
             @cwd + "/" + fname,
             @web_root_path + "/" + fname
           )
+          onSaveSuccess() if onSaveSuccess?
     emitter
 
 module.exports = CameraControl
