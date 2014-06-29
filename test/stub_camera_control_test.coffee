@@ -1,22 +1,22 @@
 expect = require("chai").expect
 sinon = require("sinon")
-MockCameraControl = require "../lib/mock_camera_control"
+StubCameraControl = require "../lib/stub_camera_control"
 EventEmitter = require("events").EventEmitter
 
-describe "MockCameraControl", ->
+describe "StubCameraControl", ->
 
   describe "constructor", ->
     it "returns instance of MCC", ->
-      mcc = new MockCameraControl()
-      expect(mcc).to.be.instanceof(MockCameraControl)
+      mcc = new StubCameraControl()
+      expect(mcc).to.be.instanceof(StubCameraControl)
   describe "#init", ->
     it "returns EventEmitter", ->
-      ee = new MockCameraControl().init()
+      ee = new StubCameraControl().init()
       expect(ee).to.be.instanceof(EventEmitter)
 
   describe "events", ->
     describe "on 'snap'", ->
-      subject = new MockCameraControl().init()
+      subject = new StubCameraControl().init()
 
       it "emits 'camera_begin_snap'", ->
         spy = sinon.spy()
