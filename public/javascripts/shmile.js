@@ -4,8 +4,8 @@ var Shmile = {
   WINDOW_HEIGHT: $(window).height() - 10,
   OVERLAY_DELAY: 2000,
   NEXT_DELAY: 10000,
-  CHEESE_DELAY: 1000,
-  FLASH_DURATION: 1500,
+  CHEESE_DELAY: 400,
+  FLASH_DURATION: 1000,
   READY_DELAY: 2000,
   NICE_DELAY: 5000
 }
@@ -107,8 +107,10 @@ var fsm = StateMachine.create({
     },
     onenterwaiting_for_photo: function(e) {
       var randomId = Math.ceil(Math.random()*100000);
-      socket.emit('snap', true);
-      CameraUtils.snap(State.current_frame_idx);
+      cheeseCb = function() {
+        socket.emit('snap', true);
+      }
+      CameraUtils.snap(State.current_frame_idx, cheeseCb);
     },
     onphoto_saved: function(e, f, t, data) {
       // update UI
