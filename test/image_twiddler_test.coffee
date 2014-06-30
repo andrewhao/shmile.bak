@@ -15,12 +15,6 @@ describe "ImageTwiddler", ->
   beforeEach ->
     ImageTwiddler.__set__("im", fakeImageMagick)
     ImageTwiddler.__set__("exec", fakeExec)
-    @images = [
-      "test/fixtures/images/1.jpg",
-      "test/fixtures/images/2.jpg",
-      "test/fixtures/images/3.jpg",
-      "test/fixtures/images/4.jpg"
-    ]
   describe "#constructor", ->
     it "returns instance of ImageTwiddler", ->
       cc = new ImageTwiddler()
@@ -33,8 +27,8 @@ describe "ImageTwiddler", ->
 
   describe "events", ->
     describe "on 'composite'", ->
-      it "emits 'laid_out' when done with step one", ->
-        @it = new ImageTwiddler(@images).init()
+      xit "emits 'laid_out' when done with step one", ->
+        @it = new ImageTwiddler().init()
 
         spy = sinon.spy()
         @it.on("laid_out", spy)
