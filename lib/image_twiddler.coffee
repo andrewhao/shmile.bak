@@ -8,11 +8,6 @@ IMAGE_WIDTH = 1200
 IMAGE_PADDING = 50
 TOTAL_HEIGHT = IMAGE_HEIGHT * 2 + IMAGE_PADDING * 3
 TOTAL_WIDTH = IMAGE_WIDTH * 2 + IMAGE_PADDING * 3
-IMAGE_GEOMETRY = "#{IMAGE_WIDTH}x#{IMAGE_HEIGHT}"
-GEOMETRIES = [ IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + IMAGE_PADDING,
-  IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + IMAGE_PADDING,
-  IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + (IMAGE_HEIGHT + 2 * IMAGE_PADDING),
-  IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + (2 * IMAGE_PADDING + IMAGE_HEIGHT) ]
 
 # Composites an array of four images into the final grid-based image asset.
 class ImageTwiddler
@@ -25,16 +20,17 @@ class ImageTwiddler
   constructor: (@img_src_list=[], @opts=null, @cb) ->
     @opts = @defaults if @opts is null
 
-  emitter: new EventEmitter()
-
-  init: =>
-    @emitter.on "composite", =>
+  init: ->
+    emitter = new EventEmitter()
+    emitter.on "composite", =>
       convertArgs = [ "-size", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, "canvas:white" ]
       utcSeconds = (new Date()).valueOf()
-      @output_path = "#{@opts.tmp_dir}/out.jpeg"
-      @output_file_name = "#{utcSeconds}.jpeg"
-      @final_output_path = "#{@opts.output_dir}/gen_#{@output_file_name}"
-      @final_output_thumb_path = "#{@opts.thumb_dir}/thumb_#{@output_file_name}"
+      IMAGE_GEOMETRY = "#{IMAGE_WIDTH}x#{IMAGE_HEIGHT}"
+      OUTPUT_PATH = "#{@opts.tmp_dir}/out.jpeg"
+      OUTPUT_FILE_NAME = "#{utcSeconds}.jpeg"
+      FINAL_OUTPUT_PATH = "#{@opts.output_dir}/gen_#{OUTPUT_FILE_NAME}"
+      FINAL_OUTPUT_THUMB_PATH = "#{@opts.thumb_dir}/thumb_#{OUTPUT_FILE_NAME}"
+      GEOMETRIES = [ IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + (IMAGE_HEIGHT + 2 * IMAGE_PADDING), IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + (2 * IMAGE_PADDING + IMAGE_HEIGHT) ]
 
       i = 0
       while i < @img_src_list.length
@@ -43,34 +39,28 @@ class ImageTwiddler
         convertArgs.push GEOMETRIES[i]
         convertArgs.push "-composite"
         i++
-      convertArgs.push @output_path
-
+      convertArgs.push OUTPUT_PATH
       im.convert(
         convertArgs,
-        @convertCb
+        (err, stdout, stderr) ->
+          throw err  if err
+          emitter.emit "laid_out", OUTPUT_PATH
+          doCompositing()
       )
 
-    @emitter
+      doCompositing = =>
+        compositeArgs = [ "-gravity", "center", @opts.overlay_src, OUTPUT_PATH, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, FINAL_OUTPUT_PATH ]
+        exec "composite " + compositeArgs.join(" "), (error, stderr, stdout) ->
+          throw error  if error
+          emitter.emit "composited", FINAL_OUTPUT_PATH
+          doGenerateThumb()
 
-  # ------------------------------------------------------------
-  # TODO: Refactor this callback chain into promises.
-  # ------------------------------------------------------------
+      resizeCompressArgs = [ "-size", "25%", "-quality", "20", FINAL_OUTPUT_PATH, FINAL_OUTPUT_THUMB_PATH ]
+      doGenerateThumb = =>
+        im.convert resizeCompressArgs, (e, out, err) ->
+          throw err  if err
+          emitter.emit "generated_thumb", FINAL_OUTPUT_THUMB_PATH
 
-  convertCb: (err, stdout, stderr) =>
-    @emitter.emit "laid_out", @output_path
-    @composite()
-
-  composite: ->
-    compositeArgs = [ "-gravity", "center", @opts.overlay_src, @output_path, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, @final_output_path ]
-    exec "composite " + compositeArgs.join(" "), @compositeCb
-
-  compositeCb: (error, stderr, stdout) =>
-    @emitter.emit "composited", @final_output_path
-    @generateThumb()
-
-  generateThumb: ->
-    resizeCompressArgs = [ "-size", "25%", "-quality", "20", @final_output_path, @final_output_thumb_path ]
-    im.convert resizeCompressArgs, (e, out, err) =>
-      @emitter.emit "generated_thumb", @final_output_thumb_path
+    emitter
 
 module.exports = ImageTwiddler
