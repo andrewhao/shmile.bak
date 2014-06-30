@@ -58,7 +58,7 @@ io.sockets.on "connection", (websocket) ->
       web_url: web_url
 
   websocket.on "snap", (isFirst) ->
-    camera.emit "snap", isFirst
+    camera.emit "snap"
 
   websocket.on "all_images", ->
 

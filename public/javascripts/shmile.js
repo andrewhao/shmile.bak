@@ -4,10 +4,19 @@ var Shmile = {
   WINDOW_HEIGHT: $(window).height() - 10,
   OVERLAY_DELAY: 2000,
   NEXT_DELAY: 10000,
-  CHEESE_DELAY: 1000,
-  FLASH_DURATION: 1500,
+  CHEESE_DELAY: 400,
+  FLASH_DURATION: 1000,
   READY_DELAY: 2000,
-  NICE_DELAY: 5000
+  NICE_DELAY: 5000,
+
+  // The amount of time we should pause between each frame shutter
+  // I tend to bump this up when 1) photobooth participants want more
+  // time to review their photos between shots, and 2) when I'm shooting
+  // with external flash and the flash needs more time to recharge.
+  BETWEEN_SNAP_DELAY: 1000,
+
+  // For usability enhancements on iPad, set this to "true"
+  IS_MOBILE: false
 }
 
 // Current app state 
@@ -18,7 +27,8 @@ var State = {
   zoomed: null
 };
 
-$(window).ready(function () {
+$(window).ready(function() {
+
   // init code
   startButton = $('button#start-button');
   var buttonX = (Shmile.WINDOW_WIDTH - startButton.outerWidth())/2;
@@ -28,12 +38,14 @@ $(window).ready(function () {
   
   // Position the start button in the center
   startButton.css({'top': buttonY, 'left': buttonX});
-  
-  // Click handler for the start button.
-  startButton.click(function(e) {
-      var button = $(e.currentTarget);
-      button.fadeOut(1000);
-      $(document).trigger('ui_button_pressed');
+
+
+  var buttonTriggerEvt = Shmile.IS_MOBILE ? "touchend" : "click";
+
+  startButton.bind(buttonTriggerEvt, function(e) {
+    var button = $(e.currentTarget);
+    button.fadeOut(1000);
+    $(document).trigger('ui_button_pressed');
   });
 
   p = new PhotoView();
@@ -107,14 +119,18 @@ var fsm = StateMachine.create({
     },
     onenterwaiting_for_photo: function(e) {
       var randomId = Math.ceil(Math.random()*100000);
-      socket.emit('snap', true);
-      CameraUtils.snap(State.current_frame_idx);
+      cheeseCb = function() {
+        socket.emit('snap', true);
+      }
+      CameraUtils.snap(State.current_frame_idx, cheeseCb);
     },
     onphoto_saved: function(e, f, t, data) {
       // update UI
       // By the time we get here, the idx has already been updated!!
       p.updatePhotoSet(data.web_url, State.current_frame_idx, function() {
-        fsm.photo_updated();
+        setTimeout(function() {
+          fsm.photo_updated();
+        }, Shmile.BETWEEN_SNAP_DELAY)
       });
     },
     onphoto_updated: function(e, f, t) {

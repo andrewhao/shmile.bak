@@ -1,3 +1,4 @@
+// Wrapper around a SVG frame to animate/render images within.
 function PhotoView() {
     this.container = $('#viewport');
     this.canvas = new Raphael('viewport', Shmile.WINDOW_WIDTH, Shmile.WINDOW_HEIGHT);

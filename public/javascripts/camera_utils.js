@@ -7,12 +7,16 @@ function CameraUtils() {};
  * Play the snap effect.
  * @param {Integer} idx
  *   The frame index to place the updated image.
+ * @param {Function} cheeseCB
+ *   Code to execute after "Cheese" is displayed.
+ *   Typically, this wraps the command to fire the shutter.
  */
-CameraUtils.snap = function(idx) {
+CameraUtils.snap = function(idx, cheeseCb) {
     p.zoomFrame(idx, 'in');
     p.modalMessage('Ready?', Shmile.READY_DELAY);
     setTimeout(function() {
         p.modalMessage('Cheese!', Shmile.CHEESE_DELAY);
+        cheeseCb();
         p.flashEffect(Shmile.FLASH_DURATION);
     }, Shmile.READY_DELAY);
     
