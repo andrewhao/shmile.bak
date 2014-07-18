@@ -25,10 +25,13 @@ class ImageTwiddler
   constructor: (@img_src_list=[], @opts=null, @cb) ->
     @opts = @defaults if @opts is null
 
-  emitter: new EventEmitter()
-
   init: =>
+    @emitter = new EventEmitter()
+    @emitter.on "setImages", (img_src_list) =>
+      console.log "updating images"
+      @img_src_list = img_src_list
     @emitter.on "composite", =>
+      console.log "compositing"
       convertArgs = [ "-size", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, "canvas:white" ]
       utcSeconds = (new Date()).valueOf()
       @output_path = "#{@opts.tmp_dir}/out.jpeg"
