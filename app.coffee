@@ -44,6 +44,7 @@ web.listen 3000
 io.sockets.on "connection", (websocket) ->
   sys.puts "Web browser connected"
   camera = new CameraControl().init()
+  compositer = new ImageTwiddler().init()
   camera.on "camera_begin_snap", ->
     websocket.emit "camera_begin_snap"
 
@@ -63,17 +64,20 @@ io.sockets.on "connection", (websocket) ->
   websocket.on "all_images", ->
 
   websocket.on "composite", ->
-    compositer = new ImageTwiddler(State.image_src_list).init()
+    compositer.emit "setImages", State.image_src_list
     compositer.emit "composite"
-    compositer.on "composited", (output_file_path) ->
-      console.log "Finished compositing image. Output image is at ", output_file_path
-      State.image_src_list = []
 
-      # Control this with PRINTER=true or PRINTER=false
-      if process.env.PRINTER_ENABLED is "true"
-        console.log "Printing image at ", output_file_path
-        exec "lpr -o #{process.env.PRINTER_IMAGE_ORIENTATION} -o media=\"#{process.env.PRINTER_MEDIA}\" #{output_file_path}"
-      websocket.broadcast.emit "composited_image", PhotoFileUtils.photo_path_to_url(output_file_path)
+  compositer.on "composited", (output_file_path) ->
+    console.log "Finished compositing image. Output image is at ", output_file_path
+    State.image_src_list = []
 
-    compositer.on "generated_thumb", (thumb_path) ->
-      websocket.broadcast.emit "generated_thumb", PhotoFileUtils.photo_path_to_url(thumb_path)
+    # Control this with PRINTER=true or PRINTER=false
+    if process.env.PRINTER_ENABLED is "true"
+      console.log "Printing image at ", output_file_path
+      exec "lpr -o #{process.env.PRINTER_IMAGE_ORIENTATION} -o media=\"#{process.env.PRINTER_MEDIA}\" #{output_file_path}"
+    websocket.broadcast.emit "composited_image", PhotoFileUtils.photo_path_to_url(output_file_path)
+
+  compositer.on "generated_thumb", (thumb_path) ->
+    console.log "generated thumb"
+    websocket.broadcast.emit "generated_thumb", PhotoFileUtils.photo_path_to_url(thumb_path)
+
