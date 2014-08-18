@@ -1,31 +1,38 @@
 expect = require("chai").expect
 sinon = require("sinon")
 rewire = require("rewire")
-fs = require "fs"
+fs = require "fs-extra"
 StubCameraControl = rewire "../lib/stub_camera_control"
 EventEmitter = require("events").EventEmitter
 
 describe "StubCameraControl", ->
 
-  mockFs = sinon.stub(fs)
+  describe "initialization events", ->
+    describe "constructor", ->
+      it "returns instance of MCC", ->
+        mcc = new StubCameraControl()
+        expect(mcc).to.be.instanceof(StubCameraControl)
 
-  beforeEach ->
-    StubCameraControl.__set__("fs", mockFs)
+    describe "#init", ->
+      it "returns EventEmitter", ->
+        ee = new StubCameraControl().init()
+        expect(ee).to.be.instanceof(EventEmitter)
 
-  describe "constructor", ->
-    it "returns instance of MCC", ->
-      mcc = new StubCameraControl()
-      expect(mcc).to.be.instanceof(StubCameraControl)
-  describe "#init", ->
-    it "returns EventEmitter", ->
-      ee = new StubCameraControl().init()
-      expect(ee).to.be.instanceof(EventEmitter)
+  describe "events", =>
+    mockFs = null
 
-  describe "events", ->
+    beforeEach ->
+      mockFs = sinon.mock(fs)
+      mockFs.expects("copySync").atLeast(1).returns(true)
+      StubCameraControl.__set__("fs", fs)
+
+    afterEach ->
+      mockFs.restore()
+
     describe "on 'snap'", ->
       subject = new StubCameraControl().init()
 
-      it "emits 'camera_begin_snap'", ->
+      it "emits 'camera_begin_snap'", =>
         spy = sinon.spy()
         subject.on("camera_begin_snap", spy)
         subject.emit "snap"
@@ -39,17 +46,11 @@ describe "StubCameraControl", ->
 
         expect(spy.called).to.be.true
 
-
       describe "when simulating gphoto save", ->
         it "moves a fixture file to the public directory", ->
-          mockFs.expects("renameSync")
-            .withArgs("test/fixtures/test_photo.jpg", "public/tmp/test_photo.jpg")
-          subject.emit "snap"
-          mockFs.verify()
-
-        it "moves the preview file to the public direcotry", ->
-          mockFs.expects("renameSync")
-            .withArgs("test/fixtures/test_photo_preview.jpg", "public/tmp/test_photo_preview.jpg")
+          mockFs.expects("copySync")
+            .withArgs("test/fixtures/test_photo.jpg", "public/temp/test_photo.jpg")
+            .atLeast(1)
           subject.emit "snap"
           mockFs.verify()
 
@@ -58,8 +59,8 @@ describe "StubCameraControl", ->
           subject.on("photo_saved", spy)
           subject.emit "snap"
           expect(spy.called).to.be.true
-          fname = "mockCameraPhoto.jpg"
-          cwdPath = "public/photos/#{fname}"
-          webUrl = "/photos/#{fname}"
+          fname = "test_photo.jpg"
+          cwdPath = "public/temp/#{fname}"
+          webUrl = "/temp/#{fname}"
           expect(spy.calledWith(fname, cwdPath, webUrl)).to.be.true
 

@@ -9,6 +9,7 @@ dotenv = require "dotenv"
 dotenv.load()
 console.log("printer is: #{process.env.PRINTER_ENABLED}")
 PhotoFileUtils = require("./lib/photo_file_utils")
+StubCameraControl = require("./lib/stub_camera_control")
 CameraControl = require("./lib/camera_control")
 ImageTwiddler = require("./lib/image_twiddler")
 
@@ -39,11 +40,14 @@ exp.get "/gallery", (req, res) ->
     image_paths: PhotoFileUtils.composited_images(true)
 
 State = image_src_list: []
+ccKlass = if process.env['STUB_CAMERA'] is "true" then StubCameraControl else CameraControl
+console.log("CameraControl is: #{ccKlass}")
+
 io = require("socket.io").listen(web)
 web.listen 3000
 io.sockets.on "connection", (websocket) ->
   sys.puts "Web browser connected"
-  camera = new CameraControl().init()
+  camera = new ccKlass().init()
   camera.on "camera_begin_snap", ->
     websocket.emit "camera_begin_snap"
 
