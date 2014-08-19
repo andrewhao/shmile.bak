@@ -1,6 +1,6 @@
 expect = require("chai").expect
 rewire = require "rewire"
-ImageTwiddler = rewire "../lib/image_twiddler"
+ImageCompositor = rewire "../lib/image_compositor"
 EventEmitter = require("events").EventEmitter
 sinon = require "sinon"
 
@@ -11,24 +11,24 @@ fakeImageMagick = {
     cb()
 }
 
-describe "ImageTwiddler", ->
+describe "ImageCompositor", ->
   beforeEach ->
-    ImageTwiddler.__set__("im", fakeImageMagick)
-    ImageTwiddler.__set__("exec", fakeExec)
+    ImageCompositor.__set__("im", fakeImageMagick)
+    ImageCompositor.__set__("exec", fakeExec)
   describe "#constructor", ->
-    it "returns instance of ImageTwiddler", ->
-      cc = new ImageTwiddler()
-      expect(cc).to.be.instanceof(ImageTwiddler)
+    it "returns instance of ImageCompositor", ->
+      cc = new ImageCompositor()
+      expect(cc).to.be.instanceof(ImageCompositor)
 
   describe "#init", ->
     it "returns EventEmitter", ->
-      ee = new ImageTwiddler().init()
+      ee = new ImageCompositor().init()
       expect(ee).to.be.instanceof(EventEmitter)
 
   describe "events", ->
     describe "on 'composite'", ->
       xit "emits 'laid_out' when done with step one", ->
-        @it = new ImageTwiddler().init()
+        @it = new ImageCompositor().init()
 
         spy = sinon.spy()
         @it.on("laid_out", spy)
