@@ -8,7 +8,7 @@ PhotoFileUtils = (->
     ret = []
     for i of files
       file = files[i]
-      if file.match(/jpeg$/)
+      if file.match(/jpg$/)
         prefix = (if (wantUrlPrefix) then photo_path_to_url(path) + "/" else "")
         ret.push prefix + file
     ret

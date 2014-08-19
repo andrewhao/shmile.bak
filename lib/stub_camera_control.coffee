@@ -1,5 +1,5 @@
 EventEmitter = require("events").EventEmitter
-fs = require("fs")
+fs = require("fs-extra")
 
 ###
 # Fake camera controller for frontend testing.
@@ -7,29 +7,37 @@ fs = require("fs")
 class StubCameraControl
   emitter: new EventEmitter()
   paths:
-    cwd: "public/tmp",
-    web: "/photos"
+    cwd: "public/temp",
+    web_image_dir: "/temp"
     fixtures: "test/fixtures",
     photo_file: "test_photo.jpg",
-    preview_file: "test_photo_preview.jpg"
+
+  photoPath: ->
+    "#{@paths.cwd}/#{@paths.photo_file}"
+
+  webPhotoPath: ->
+    "#{@paths.web_image_dir}/#{@paths.photo_file}"
+
+  photoFixturePath: ->
+    "#{@paths.fixtures}/#{@paths.photo_file}"
 
   init: ->
     @emitter.on("snap", =>
       @emitter.emit "camera_begin_snap"
+      # no-op
       @emitter.emit "camera_snapped"
 
-      fs.renameSync(
-        "#{@paths.fixtures}/#{@paths.photo_file}",
-        "#{@paths.cwd}/#{@paths.photo_file}"
+      fs.copySync(
+        @photoFixturePath(),
+        @photoPath()
       )
 
-      # copy to web preview URL
-      fs.renameSync(
-        "#{@paths.fixtures}/#{@paths.preview_file}",
-        "#{@paths.cwd}/#{@paths.preview_file}"
+      @emitter.emit(
+        "photo_saved",
+        @paths.photo_file,
+        @photoPath(),
+        @webPhotoPath()
       )
-
-      @emitter.emit "photo_saved"
     )
     @emitter
 
