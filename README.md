@@ -26,7 +26,15 @@ When you are done, save your overlay resource into `public/images/overlay.png`.
 
 #### Printer
 
-* Make sure your printer is set as the system default.
+By default, shmile does not try to print to a printer. However, should
+you decide to use one (I personally use a Canon CP770), it should be
+relatively simple to set up.
+
+1. Make sure your printer is set as the system default.
+2. When booting your server, be sure to supply a `PRINTER=true`
+   environment variable. For example:
+
+    $ PRINTER=true coffee app.coffee
 
 ### Deploying/running
 
@@ -34,21 +42,25 @@ When you are done, save your overlay resource into `public/images/overlay.png`.
 
 The server is responsible for controlling the camera, and serving the Web interface that users will see. Here we assume that you already have [Homebrew](http://brew.sh/) installed and running on your Mac.
 
-### Install node & npm
+##### Install node & npm
 
 I've currently tested this app against `node 0.10`.
 
     $ brew install node
 
-### Install imagemagick
+##### Install imagemagick
 
     $ brew install imagemagick
 
-### Install [`gphoto2`](http://www.gphoto.org/proj/gphoto2/)
+##### Install [`gphoto2`](http://www.gphoto.org/proj/gphoto2/)
 
     $ brew install gphoto2
 
-### Get the project running.
+##### Install gulp, coffee-script globally (if you haven't already)
+
+    $ npm install -g gulp coffee-script
+
+##### Get the project running.
 
 Go to project root. We assume that you've checked out this repo into `/path/to/shmile`.
 
@@ -58,7 +70,15 @@ Go to project root. We assume that you've checked out this repo into `/path/to/s
 
 The server should begin running.
 
-#### Control interface
+#### Configuration variables
+
+* `PRINTER=true` causes shmile to queue up a print job to your default
+  printer as soon as a photo session is complete.
+* `STUB_CAMERA=true` allows you to not use the camera control interface.
+  You should only need this feature when you are actually developing on
+  shmile.
+
+### Control view
 
 This is a Web browser that displays the camera control interface, and shows the visitor the real-time creation of the image. For simple deployments, this can simply be on the same computer that is running the server.
 
@@ -66,7 +86,7 @@ This is a Web browser that displays the camera control interface, and shows the 
 2. If you want to use an iPad to display this interface, you'll need to have the laptop and iPad connected to the same network. Open Safari on iPad, and type in `<computer-name>:3000` to the Address Bar. Tap the `Go To` button in the Safari bar, and save the app to your home screen (see: http://www.apple.com/iphone/tips/).
 3. On your iPad Home Screen, open the "shmile" app you've just created.
 
-#### Gallery interface
+### Gallery view
 
 This is a Web browser instance that displays a view of all the generated images taken so far.
 
@@ -80,6 +100,18 @@ Note: this is currently buggy and will not work if you don't have any images tak
 
 * This was developed for OS X. I cannot help you if you're attempting to run on Windows or Linux distributions.
 * Note that the `PTPCamera` daemon boots up whenever you plug in your camera. Running a `killall PTPCamera` will do the trick. Shmile automatically runs this command for you when you boot up.
+
+### Contributing to shmile
+
+Submit a PR to this repository. Make sure you explain what your PR is
+doing and appropriate test coverage is in place.
+
+#### Developing shmile without requiring a camera module
+
+When developing against the UI, it helps to decouple the camera
+subsystem from the UI. To this end, you can supply a `STUB_CAMERA=true`
+environment variable. A fixture image will take the place of the
+camera's gphoto2 dependency.
 
 ### Credits
 
