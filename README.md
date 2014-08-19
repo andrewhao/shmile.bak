@@ -34,6 +34,7 @@ relatively simple to set up.
 2. When booting your server, be sure to supply a `PRINTER=true`
    environment variable. For example:
 
+
     $ PRINTER=true coffee app.coffee
 
 ### Deploying/running
@@ -82,7 +83,7 @@ The server should begin running.
 
 This is a Web browser that displays the camera control interface, and shows the visitor the real-time creation of the image. For simple deployments, this can simply be on the same computer that is running the server.
 
-1. Navigate to `localhost:3000` in a A-Grade Web browser (Chrome and Safari latest recommended).
+1. Navigate to `localhost:3000` in a evergreen Web browser (Chrome and Safari latest recommended).
 2. If you want to use an iPad to display this interface, you'll need to have the laptop and iPad connected to the same network. Open Safari on iPad, and type in `<computer-name>:3000` to the Address Bar. Tap the `Go To` button in the Safari bar, and save the app to your home screen (see: http://www.apple.com/iphone/tips/).
 3. On your iPad Home Screen, open the "shmile" app you've just created.
 
