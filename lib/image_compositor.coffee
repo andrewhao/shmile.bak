@@ -10,7 +10,7 @@ TOTAL_HEIGHT = IMAGE_HEIGHT * 2 + IMAGE_PADDING * 3
 TOTAL_WIDTH = IMAGE_WIDTH * 2 + IMAGE_PADDING * 3
 
 # Composites an array of four images into the final grid-based image asset.
-class ImageTwiddler
+class ImageCompositor
   defaults:
     overlay_src: "public/images/overlay.png"
     tmp_dir: "public/temp"
@@ -63,4 +63,4 @@ class ImageTwiddler
 
     emitter
 
-module.exports = ImageTwiddler
+module.exports = ImageCompositor
