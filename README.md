@@ -4,11 +4,9 @@
 
 [![Build Status](https://travis-ci.org/porkbuns/shmile.svg?branch=master)](https://travis-ci.org/porkbuns/shmile)
 
-### Description
-
 With your digital camera, a laptop and a printer, you can have your own DIY low-cost photobooth.
 
-### Preparation
+### Before you get started
 
 #### Overlay
 
@@ -33,7 +31,6 @@ relatively simple to set up.
 1. Make sure your printer is set as the system default.
 2. When booting your server, be sure to supply a `PRINTER=true`
    environment variable. For example:
-
 
     $ PRINTER=true coffee app.coffee
 
@@ -61,12 +58,17 @@ I've currently tested this app against `node 0.10`.
 
     $ npm install -g gulp coffee-script
 
+##### Install bower
+
+    $ npm install -g bower
+
 ##### Get the project running.
 
 Go to project root. We assume that you've checked out this repo into `/path/to/shmile`.
 
     $ cd /path/to/shmile
     $ npm install
+    $ bower install
     $ coffee app.coffee
 
 The server should begin running.
