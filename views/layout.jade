@@ -13,11 +13,11 @@ html
     meta(name='viewport', content="initial-scale=1.0, user-scalable=no")
     meta(name='apple-mobile-web-app-status-bar-style', content='black')
 
-    script(type='text/javascript', src='/javascripts/jquery-1.6.1.min.js')
+    script(type='text/javascript', src='/components/jquery/dist/jquery.min.js')
     script(type='text/javascript', src='/socket.io/socket.io.js')
-    script(type='text/javascript', src='/javascripts/raphael-min.js')
-    script(type='text/javascript', src='/javascripts/state-machine.min.js')
-    script(type='text/javascript', src='/javascripts/underscore-min.js')
+    script(type='text/javascript', src='/components/raphael/raphael-min.js')
+    script(type='text/javascript', src='/components/javascript-state-machine/state-machine.min.js')
+    script(type='text/javascript', src='/components/underscore/underscore-min.js')
 
     each js_file in extra_js
       script(type='text/javascript', src='/javascripts/shmile-client/' + js_file + '.js')
