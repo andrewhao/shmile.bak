@@ -29,13 +29,21 @@ exp.configure ->
 exp.get "/", (req, res) ->
   res.render "index",
     title: "shmile"
-    extra_js: [ "camera_utils", "photo_view", "shmile" ]
+    extra_js: [
+      "frontend/camera_utils",
+      "frontend/photo_view",
+      "frontend/shmile"
+    ]
     extra_css: []
 
 exp.get "/gallery", (req, res) ->
   res.render "gallery",
     title: "gallery!"
-    extra_js: [ "photoswipe/klass.min", "code.photoswipe.jquery-3.0.4.min", "shmile_gallery" ]
+    extra_js: [
+      "gallery/photoswipe/klass.min",
+      "gallery/code.photoswipe.jquery-3.0.4.min",
+      "gallery/shmile_gallery"
+    ]
     extra_css: [ "photoswipe/photoswipe" ]
     image_paths: PhotoFileUtils.composited_images(true)
 
