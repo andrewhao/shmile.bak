@@ -1,9 +1,9 @@
 var PhotoView = Backbone.View.extend({
   id: "#viewport",
 
-  initialize: function(Shmile) {
-    this.Shmile = Shmile
-    this.canvas = new Raphael('viewport', Shmile.WINDOW_WIDTH, Shmile.WINDOW_HEIGHT);
+  initialize: function(config) {
+    this.config = config
+    this.canvas = new Raphael('viewport', this.config.WINDOW_WIDTH, this.config.WINDOW_HEIGHT);
     this.frames = this.canvas.set(); // List of SVG black rects
     this.images = this.canvas.set(); // List of SVG images
     this.all = this.canvas.set();
@@ -16,12 +16,12 @@ var PhotoView = Backbone.View.extend({
   },
 
   render: function() {
-    var w = this.Shmile.WINDOW_WIDTH - this.Shmile.PHOTO_MARGIN;
-    var h = this.Shmile.WINDOW_HEIGHT - this.Shmile.PHOTO_MARGIN;
+    var w = this.config.WINDOW_WIDTH - this.config.PHOTO_MARGIN;
+    var h = this.config.WINDOW_HEIGHT - this.config.PHOTO_MARGIN;
     this.compositeDim = CameraUtils.scale4x6(w, h);
     this.compositeOrigin = {
-        x: (this.Shmile.WINDOW_WIDTH - this.compositeDim.w) / 2,
-        y: (this.Shmile.WINDOW_HEIGHT - this.compositeDim.h) / 2
+        x: (this.config.WINDOW_WIDTH - this.compositeDim.w) / 2,
+        y: (this.config.WINDOW_HEIGHT - this.compositeDim.h) / 2
     };
     this.compositeCenter = {
         x: this.compositeOrigin.x + (this.compositeDim.w/2),
@@ -91,7 +91,7 @@ var PhotoView = Backbone.View.extend({
     
     // Hide everything and move out of sight.
     this.all.hide();
-    this.all.translate(-Shmile.WINDOW_WIDTH, 0);
+    this.all.translate(-this.config.WINDOW_WIDTH, 0);
   },
 
   toString: function() {
@@ -139,11 +139,11 @@ var PhotoView = Backbone.View.extend({
       this.images.hide();
       this.overlayImage.hide();
       this.all.animate({
-        'translation': Shmile.WINDOW_WIDTH+",0"
+        'translation': this.config.WINDOW_WIDTH+",0"
       }, 1000, "<>", cb);        
     } else if (dir === 'out') {
       this.all.animate({
-        'translation': Shmile.WINDOW_WIDTH+",0"
+        'translation': this.config.WINDOW_WIDTH+",0"
       }, 1000, "<>", cb);
     }
   },
@@ -218,7 +218,7 @@ var PhotoView = Backbone.View.extend({
       this.resetState();
       this.modalMessage('Next!');
       this.all.hide();
-      this.all.translate(-Shmile.WINDOW_WIDTH * 2, 0);
+      this.all.translate(-this.config.WINDOW_WIDTH * 2, 0);
       this.animate('in', function() {
         $('#start-button').fadeIn();
       });
@@ -241,7 +241,7 @@ var PhotoView = Backbone.View.extend({
    */
   flashEffect: function(duration) {
       if (duration === undefined) { duration = 200; }
-      var rect = this.canvas.rect(0, 0, Shmile.WINDOW_WIDTH, Shmile.WINDOW_HEIGHT);
+      var rect = this.canvas.rect(0, 0, this.config.WINDOW_WIDTH, this.config.WINDOW_HEIGHT);
       rect.attr({'fill': 'white', 'opacity': 0});
       rect.animate({'opacity': 1}, duration, ">", function() {
           rect.animate({'opacity': 0}, duration, "<");
@@ -256,9 +256,9 @@ var PhotoView = Backbone.View.extend({
       if (animateSpeed === undefined) { var animateSpeed = 200; }
       if (persistTime === undefined) { var persistTime = 500; }
   
-      var sideLength = Shmile.WINDOW_HEIGHT * 0.3;
-      var x = (Shmile.WINDOW_WIDTH - sideLength)/2;
-      var y = (Shmile.WINDOW_HEIGHT - sideLength)/2;
+      var sideLength = this.config.WINDOW_HEIGHT * 0.3;
+      var x = (this.config.WINDOW_WIDTH - sideLength)/2;
+      var y = (this.config.WINDOW_HEIGHT - sideLength)/2;
       var all = this.canvas.set();
       var r = this.canvas.rect(x, y,
           sideLength,
@@ -298,7 +298,7 @@ var PhotoView = Backbone.View.extend({
       this.overlayImage.show();
       if (animate) {
           //this.overlayImage.attr({'opacity':0});
-        this.overlayImage.animate({'opacity':1}, Shmile.OVERLAY_DELAY);
+        this.overlayImage.animate({'opacity':1}, this.config.OVERLAY_DELAY);
       }
   },
 
@@ -308,7 +308,7 @@ var PhotoView = Backbone.View.extend({
   hideOverlay: function(animate) {
     var view = this;
     if (animate) {
-      this.overlayImage.animate({'opacity':0}, Shmile.OVERLAY_DELAY, function() {
+      this.overlayImage.animate({'opacity':0}, this.config.OVERLAY_DELAY, function() {
         view.overlayImage.hide();
       });
     } else {

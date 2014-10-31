@@ -50,6 +50,7 @@ class ImageCompositor
 
       doCompositing = =>
         compositeArgs = [ "-gravity", "center", @opts.overlay_src, OUTPUT_PATH, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, FINAL_OUTPUT_PATH ]
+        console.log("executing: composite " + compositeArgs.join(" "))
         exec "composite " + compositeArgs.join(" "), (error, stderr, stdout) ->
           throw error  if error
           emitter.emit "composited", FINAL_OUTPUT_PATH
