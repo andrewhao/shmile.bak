@@ -48,7 +48,7 @@ $(window).ready(function() {
     $(document).trigger('ui_button_pressed');
   });
 
-  p = new PhotoView();
+  p = new PhotoView(Shmile);
   p.render();
 });
 
