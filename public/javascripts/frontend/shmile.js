@@ -1,24 +1,3 @@
-var Shmile = {
-  PHOTO_MARGIN: 50, // Margin for the composite photo per side
-  WINDOW_WIDTH: $(window).width(),
-  WINDOW_HEIGHT: $(window).height() - 10,
-  OVERLAY_DELAY: 2000,
-  NEXT_DELAY: 10000,
-  CHEESE_DELAY: 400,
-  FLASH_DURATION: 1000,
-  READY_DELAY: 2000,
-  NICE_DELAY: 5000,
-
-  // The amount of time we should pause between each frame shutter
-  // I tend to bump this up when 1) photobooth participants want more
-  // time to review their photos between shots, and 2) when I'm shooting
-  // with external flash and the flash needs more time to recharge.
-  BETWEEN_SNAP_DELAY: 1000,
-
-  // For usability enhancements on iPad, set this to "true"
-  IS_MOBILE: false
-}
-
 // Current app state 
 var State = {
   photoset: [],
@@ -31,8 +10,8 @@ $(window).ready(function() {
 
   // init code
   startButton = $('button#start-button');
-  var buttonX = (Shmile.WINDOW_WIDTH - startButton.outerWidth())/2;
-  var buttonY = (Shmile.WINDOW_HEIGHT - startButton.outerHeight())/2;
+  var buttonX = (Config.WINDOW_WIDTH - startButton.outerWidth())/2;
+  var buttonY = (Config.WINDOW_HEIGHT - startButton.outerHeight())/2;
   
   startButton.hide();
   
@@ -40,7 +19,7 @@ $(window).ready(function() {
   startButton.css({'top': buttonY, 'left': buttonX});
 
 
-  var buttonTriggerEvt = Shmile.IS_MOBILE ? "touchend" : "click";
+  var buttonTriggerEvt = Config.IS_MOBILE ? "touchend" : "click";
 
   startButton.bind(buttonTriggerEvt, function(e) {
     var button = $(e.currentTarget);
@@ -48,7 +27,7 @@ $(window).ready(function() {
     $(document).trigger('ui_button_pressed');
   });
 
-  p = new PhotoView();
+  p = new PhotoView(Config);
   p.render();
 });
 
@@ -130,7 +109,7 @@ var fsm = StateMachine.create({
       p.updatePhotoSet(data.web_url, State.current_frame_idx, function() {
         setTimeout(function() {
           fsm.photo_updated();
-        }, Shmile.BETWEEN_SNAP_DELAY)
+        }, Config.BETWEEN_SNAP_DELAY)
       });
     },
     onphoto_updated: function(e, f, t) {
@@ -147,12 +126,12 @@ var fsm = StateMachine.create({
     onenterreview_composited: function(e, f, t) {
       socket.emit('composite');
       p.showOverlay(true);
-      setTimeout(function() { fsm.next_set() }, Shmile.NEXT_DELAY);
+      setTimeout(function() { fsm.next_set() }, Config.NEXT_DELAY);
     },
     onleavereview_composited: function(e, f, t) {
       // Clean up
       p.animate('out');
-      p.modalMessage('Nice!', Shmile.NICE_DELAY, 200, function() {p.slideInNext()});
+      p.modalMessage('Nice!', Config.NICE_DELAY, 200, function() {p.slideInNext()});
     },
     onchangestate: function(e, f, t) {
       console.log('fsm received event '+e+', changing state from ' + f + ' to ' + t)

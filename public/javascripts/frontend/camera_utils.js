@@ -13,12 +13,12 @@ function CameraUtils() {};
  */
 CameraUtils.snap = function(idx, cheeseCb) {
     p.zoomFrame(idx, 'in');
-    p.modalMessage('Ready?', Shmile.READY_DELAY);
+    p.modalMessage('Ready?', Config.READY_DELAY);
     setTimeout(function() {
-        p.modalMessage('Cheese!', Shmile.CHEESE_DELAY);
+        p.modalMessage('Cheese!', Config.CHEESE_DELAY);
         cheeseCb();
-        p.flashEffect(Shmile.FLASH_DURATION);
-    }, Shmile.READY_DELAY);
+        p.flashEffect(Config.FLASH_DURATION);
+    }, Config.READY_DELAY);
     
 }
 
