@@ -240,13 +240,28 @@ var PhotoView = Backbone.View.extend({
    * Faux camera flash
    */
   flashEffect: function(duration) {
-      if (duration === undefined) { duration = 200; }
-      var rect = this.canvas.rect(0, 0, this.config.WINDOW_WIDTH, this.config.WINDOW_HEIGHT);
-      rect.attr({'fill': 'white', 'opacity': 0});
-      rect.animate({'opacity': 1}, duration, ">", function() {
-          rect.animate({'opacity': 0}, duration, "<");
-          rect.remove();
-      })
+    if (duration === undefined) { duration = 200; }
+    var rect = this.canvas.rect(0, 0, this.config.WINDOW_WIDTH, this.config.WINDOW_HEIGHT);
+    rect.attr({'fill': 'white', 'opacity': 0});
+    rect.animate({'opacity': 1}, duration, ">", function() {
+      rect.animate({'opacity': 0}, duration, "<");
+      rect.remove();
+    })
+  },
+
+  flashStart: function(duration) {
+    if (duration === undefined) { duration = 200; }
+    this.rect = this.canvas.rect(0, 0, this.config.WINDOW_WIDTH, this.config.WINDOW_HEIGHT);
+    this.rect.attr({'fill': 'white', 'opacity': 0});
+    this.rect.animate({'opacity': 1}, duration, ">")
+  },
+
+  flashEnd: function(duration) {
+    if (duration === undefined) { duration = 200; }
+    var self = this;
+    this.rect.animate({'opacity': 0}, duration, "<", function() {
+      self.remove();
+    });
   },
   
   /**
