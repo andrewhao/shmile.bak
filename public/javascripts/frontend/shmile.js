@@ -18,7 +18,6 @@ $(window).ready(function() {
   // Position the start button in the center
   startButton.css({'top': buttonY, 'left': buttonX});
 
-
   var buttonTriggerEvt = Config.IS_MOBILE ? "touchend" : "click";
 
   startButton.bind(buttonTriggerEvt, function(e) {
@@ -96,9 +95,12 @@ var fsm = StateMachine.create({
     onenterready: function() {
       p.resetState();
     },
+    onleaveready: function() {
+    },
     onenterwaiting_for_photo: function(e) {
-      var randomId = Math.ceil(Math.random()*100000);
       cheeseCb = function() {
+        p.modalMessage('Cheese!', Config.CHEESE_DELAY);
+        p.flashStart();
         socket.emit('snap', true);
       }
       CameraUtils.snap(State.current_frame_idx, cheeseCb);
@@ -106,6 +108,7 @@ var fsm = StateMachine.create({
     onphoto_saved: function(e, f, t, data) {
       // update UI
       // By the time we get here, the idx has already been updated!!
+      p.flashEnd();
       p.updatePhotoSet(data.web_url, State.current_frame_idx, function() {
         setTimeout(function() {
           fsm.photo_updated();
@@ -113,6 +116,7 @@ var fsm = StateMachine.create({
       });
     },
     onphoto_updated: function(e, f, t) {
+      p.flashEnd();
       // We're done with the full set.
       if (State.current_frame_idx == 3) {
         fsm.finish_set();
