@@ -19,10 +19,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.1",
-    "raphael": "dbe241f4c5310dd9bf3b451c538d78c6c4a0e288",
-    "javascript-state-machine": "~2.3.3",
-    "underscore": "~1.7.0",
-    "backbone": "~1.1.2"
+    "shmile-ui": "andrewhao/shmile-ui"
   }
 }

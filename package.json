@@ -1,6 +1,6 @@
 {
   "name": "shmile",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "author": "Andrew Hao <andrewhao@gmail.com> (http://www.g9labs.com)",
   "description": "Photobooth controller for Node.",
   "keywords": [

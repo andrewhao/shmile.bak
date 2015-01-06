@@ -29,12 +29,6 @@ exp.configure ->
 exp.get "/", (req, res) ->
   res.render "index",
     title: "shmile"
-    extra_js: [
-      "frontend/camera_utils",
-      "frontend/photo_view",
-      "frontend/config",
-      "frontend/shmile"
-    ]
     extra_css: []
 
 exp.get "/gallery", (req, res) ->
@@ -48,9 +42,10 @@ exp.get "/gallery", (req, res) ->
     extra_css: [ "photoswipe/photoswipe" ]
     image_paths: PhotoFileUtils.composited_images(true)
 
+# FIXME/ahao This global state is no bueno.
 State = image_src_list: []
+
 ccKlass = if process.env['STUB_CAMERA'] is "true" then StubCameraControl else CameraControl
-console.log("CameraControl is: #{ccKlass}")
 
 io = require("socket.io").listen(web)
 web.listen 3000
