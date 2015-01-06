@@ -110,12 +110,14 @@ Note: this is currently buggy and will not work if you don't have any images tak
 Submit a PR to this repository. Make sure you explain what your PR is
 doing and appropriate test coverage is in place.
 
+### shmile-ui
+
+If you're looking for the source to the JS frontend, you'll find it at the [shmile-ui](https://github.com/andrewhao/shmile-ui) repository.
+
 #### Developing shmile without requiring a camera module
 
-When developing against the UI, it helps to decouple the camera
-subsystem from the UI. To this end, you can supply a `STUB_CAMERA=true`
-environment variable. A fixture image will take the place of the
-camera's gphoto2 dependency.
+When developing on shmile, it helps to decouple the camera
+subsystem from the UI so you can test end-to-end without the camera. To this end, you can supply a `STUB_CAMERA=true` environment variable. A stub camera will substitute for the gphoto2 backend.
 
 ### Credits
 
