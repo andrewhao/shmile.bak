@@ -18,6 +18,7 @@ class ImageCompositor
     thumb_dir: "public/photos/generated/thumbs"
 
   constructor: (@img_src_list=[], @opts=null, @cb) ->
+    console.log("img_src_list is: #{@img_src_list}")
     @opts = @defaults if @opts is null
 
   init: ->
@@ -32,14 +33,15 @@ class ImageCompositor
       FINAL_OUTPUT_THUMB_PATH = "#{@opts.thumb_dir}/thumb_#{OUTPUT_FILE_NAME}"
       GEOMETRIES = [ IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + IMAGE_PADDING, IMAGE_GEOMETRY + "+" + IMAGE_PADDING + "+" + (IMAGE_HEIGHT + 2 * IMAGE_PADDING), IMAGE_GEOMETRY + "+" + (2 * IMAGE_PADDING + IMAGE_WIDTH) + "+" + (2 * IMAGE_PADDING + IMAGE_HEIGHT) ]
 
-      i = 0
-      while i < @img_src_list.length
+      for i in [0..@img_src_list.length-1] by 1
         convertArgs.push @img_src_list[i]
         convertArgs.push "-geometry"
         convertArgs.push GEOMETRIES[i]
         convertArgs.push "-composite"
-        i++
       convertArgs.push OUTPUT_PATH
+
+      console.log("executing: convert #{convertArgs.join(" ")}")
+
       im.convert(
         convertArgs,
         (err, stdout, stderr) ->
