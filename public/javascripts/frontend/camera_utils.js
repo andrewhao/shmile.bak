@@ -12,14 +12,17 @@ function CameraUtils() {};
  *   Typically, this wraps the command to fire the shutter.
  */
 CameraUtils.snap = function(idx, cheeseCb) {
-    p.zoomFrame(idx, 'in');
-    p.modalMessage('Ready?', Config.READY_DELAY);
-    setTimeout(function() {
-        p.modalMessage('Cheese!', Config.CHEESE_DELAY);
-        cheeseCb();
-        p.flashEffect(Config.FLASH_DURATION);
-    }, Config.READY_DELAY);
-    
+  p.zoomFrame(idx, 'in');
+  // These guys need to be promises.
+  p.modalMessage('Ready?', Config.READY_DELAY, 200, function() {
+    p.modalMessage("3", 1000, 200, function() {
+      p.modalMessage("2", 1000, 200,  function() {
+        p.modalMessage("1", 1000, 200, function() {
+          cheeseCb();
+        });
+      });
+    });
+  });
 }
 
 /**

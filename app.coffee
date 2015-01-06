@@ -5,9 +5,11 @@ sys = require "sys"
 fs = require "fs"
 yaml = require "yaml"
 dotenv = require "dotenv"
+exec = require("child_process").exec
 
 dotenv.load()
 console.log("printer is: #{process.env.PRINTER_ENABLED}")
+
 PhotoFileUtils = require("./lib/photo_file_utils")
 StubCameraControl = require("./lib/stub_camera_control")
 CameraControl = require("./lib/camera_control")
@@ -15,8 +17,6 @@ ImageCompositor = require("./lib/image_compositor")
 
 exp = express()
 web = http.createServer(exp)
-
-exec = require("child_process").exec
 
 exp.configure ->
   exp.set "views", __dirname + "/views"
