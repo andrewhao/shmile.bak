@@ -34,11 +34,6 @@ exp.get "/", (req, res) ->
 exp.get "/gallery", (req, res) ->
   res.render "gallery",
     title: "gallery!"
-    extra_js: [
-      "gallery/photoswipe/klass.min",
-      "gallery/code.photoswipe.jquery-3.0.4.min",
-      "gallery/shmile_gallery"
-    ]
     extra_css: [ "photoswipe/photoswipe" ]
     image_paths: PhotoFileUtils.composited_images(true)
 

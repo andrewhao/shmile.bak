@@ -5,9 +5,7 @@ html
       block title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/shmile.css')
-
-    each css_file in extra_css
-      link(rel='stylesheet', href='/css/' + css_file + '.css')
+    link(rel='stylesheet', href='/css/photoswipe/photoswipe.css')
 
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='viewport', content="initial-scale=1.0, user-scalable=no")
@@ -21,8 +19,10 @@ html
     script(type='text/javascript', src='/components/underscore/underscore-min.js')
     script(type='text/javascript', src='/components/backbone/backbone.js')
 
-    each js_file in extra_js
-      link(rel='stylesheet', href='/javascripts/' + js_file + '.js')
+    // Gallery
+    script(type='text/javascript', src='/javascripts/gallery/photoswipe/klass.min.js')
+    script(type='text/javascript', src='/javascripts/gallery/code.photoswipe.jquery-3.0.4.min.js')
+    script(type='text/javascript', src='/javascripts/gallery/shmile_gallery.js')
 
   body.nicegradient
     block content
