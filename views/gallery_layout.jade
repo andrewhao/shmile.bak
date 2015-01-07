@@ -5,6 +5,7 @@ html
       block title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/shmile.css')
+    link(rel='stylesheet', href='/css/photoswipe/photoswipe.css')
 
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='viewport', content="initial-scale=1.0, user-scalable=no")
@@ -18,11 +19,10 @@ html
     script(type='text/javascript', src='/components/underscore/underscore-min.js')
     script(type='text/javascript', src='/components/backbone/backbone.js')
 
-    // Frontend app: shmile-ui
-    script(type='text/javascript', src='/components/shmile-ui/ui/cameraUtils.js')
-    script(type='text/javascript', src='/components/shmile-ui/ui/photoView.js')
-    script(type='text/javascript', src='/components/shmile-ui/ui/config.js')
-    script(type='text/javascript', src='/components/shmile-ui/ui/shmile.js')
+    // Gallery
+    script(type='text/javascript', src='/javascripts/gallery/photoswipe/klass.min.js')
+    script(type='text/javascript', src='/javascripts/gallery/code.photoswipe.jquery-3.0.4.min.js')
+    script(type='text/javascript', src='/javascripts/gallery/shmile_gallery.js')
 
   body.nicegradient
     block content
