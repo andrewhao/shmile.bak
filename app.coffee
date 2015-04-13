@@ -41,12 +41,16 @@ exp.get "/gallery", (req, res) ->
 State = image_src_list: []
 
 ccKlass = if process.env['STUB_CAMERA'] is "true" then StubCameraControl else CameraControl
+camera = new ccKlass().init()
+
+camera.on "photo_saved", (filename, path, web_url) ->
+    State.image_src_list.push path
 
 io = require("socket.io").listen(web)
 web.listen 3000
 io.sockets.on "connection", (websocket) ->
   sys.puts "Web browser connected"
-  camera = new ccKlass().init()
+  
   camera.on "camera_begin_snap", ->
     websocket.emit "camera_begin_snap"
 
@@ -54,7 +58,6 @@ io.sockets.on "connection", (websocket) ->
     websocket.emit "camera_snapped"
 
   camera.on "photo_saved", (filename, path, web_url) ->
-    State.image_src_list.push path
     websocket.emit "photo_saved",
       filename: filename
       path: path
