@@ -1,0 +1,12 @@
+engines:
+  csslint:
+    enabled: true
+  coffeelint:
+    enabled: true
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+exclude_paths:
+- "public/*"
+- "test/*"
